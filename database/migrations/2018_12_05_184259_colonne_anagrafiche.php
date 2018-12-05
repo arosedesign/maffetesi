@@ -14,9 +14,6 @@ class ColonneAnagrafiche extends Migration
     public function up()
     {
 		Schema::table('anagrafiche', function (Blueprint $table) {
-			$table->increments('id');
-			$table->unsignedInteger('user_id');
-			$table->foreign('user_id')->references('id')->on('users');
 			$table->char('sesso', 1);
 			$table->integer('altezza');
 			$table->integer('peso');
