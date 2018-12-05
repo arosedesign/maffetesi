@@ -15,9 +15,6 @@ class CreateDomande extends Migration
     {
 		Schema::create('domande', function (Blueprint $table) {
 			$table->increments('id');
-			$table->string('nometabella', 50);
-			$table->string('domanda', 255);
-			$table->integer('valoreopzione', 50);
 			$table->timestamps();
 		});
     }

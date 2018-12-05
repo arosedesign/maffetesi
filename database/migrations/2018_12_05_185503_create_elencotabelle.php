@@ -15,7 +15,6 @@ class CreateElencotabelle extends Migration
     {
         Schema::create('elencotabelle', function (Blueprint $table) {
             $table->increments('id');
-			$table->string('nometabella', 50);
             $table->timestamps();
         });
     }

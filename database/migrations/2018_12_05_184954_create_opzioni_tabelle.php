@@ -15,10 +15,6 @@ class CreateOpzioniTabelle extends Migration
     {
         Schema::create('opzioni_tabelle', function (Blueprint $table) {
             $table->increments('id');
-			$table->string('nometabella', 50);
-			$table->string('nomeopzione', 50);
-			$table->integer('valoreopzione', 50);
-            $table->timestamps();
         });
     }
 
