@@ -20,7 +20,6 @@ class ColonneAnagrafiche extends Migration
 			$table->string('eta', 50);
 			$table->string('livello', 50);
 			$table->string('sport', 50);
-			$table->timestamps();
 		});
     }
 
