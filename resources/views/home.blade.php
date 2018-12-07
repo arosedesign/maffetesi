@@ -4,7 +4,7 @@
 <div class="container pannello">
 
     @if(Auth::user()->role == 'admin')
-        <div class="row">
+        <div class="row gestioneutenti">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
                     <div class="panel-heading">Gestione utenti</div>
@@ -45,6 +45,49 @@
                 </div>
             </div>
         </div>
+
+        <div class="row gestionetabelle">
+
+            <div class="col-md-12">
+
+
+                <h2>Gestione tabelle</h2>
+
+                <div class="panel panel-default">
+                    {{ Form::open(array('route' => 'editTabella')) }}
+                        {{ Form::hidden('id', $table->id)  }}
+
+                        <div class="panel-heading">
+                            <h4>Anagrafiche</h4>
+                            <label for="descrizione">Descrizione</label>
+                            {{ Form::text('tipo', $table->descrizione)  }}
+                            <label for="tipo">Tipo</label>
+                            {{ Form::text('tipo', $table->tipo)  }}
+                        </div>
+
+                        <div class="panel-body">
+
+                        </div>
+                    {{ Form::close() }}
+
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     @else
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
