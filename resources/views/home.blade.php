@@ -10,19 +10,36 @@
                     <div class="panel-heading">Gestione utenti</div>
 
                     <div class="panel-body">
-                        <tbody>
-                        @foreach ($users as $user)
+                        <table class="table">
+                            <thead>
                             <tr>
-                                <td>{{ $user->name }}</td>
-                                <td>{{ $user->email }}</td>
-                                <td>
-                                    {{ Form::open(['method' => 'DELETE', 'route' => ['comics.destroy', $user->id]]) }}
-                                    {{ Form::submit('Delete', ['class' => 'btn btn-danger']) }}
-                                    {{ Form::close() }}
-                                </td>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">Ruolo</th>
+                                <th scope="col"></th>
                             </tr>
-                        @endforeach
-                        </tbody>
+                            </thead>
+                            <tbody>
+                            @foreach ($users as $user)
+                                <tr>
+                                    <td>{{ $user->name }}</td>
+                                    <td>{{ $user->email }}</td>
+                                    <td>{{ $user->role }}</td>
+                                    <td>
+                                        @if(Auth::user()->id != $user->id)
+
+                                            {{ Form::open(array('route' => 'editUser')) }}
+                                            {{ Form::hidden('id', $user->id)  }}
+                                            {{ Form::select('azione', array('rendiadmin' => 'Rendi admin', 'elimina' => 'Elimina')) }}
+                                            {{ Form::submit('Esegui', ['class' => 'btn btn-danger btn-esegui']) }}
+                                            {{ Form::close() }}
+
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
 
                     </div>
                 </div>
