@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 
 
+
 class HomeController extends Controller
 {
     /**
@@ -30,18 +31,19 @@ class HomeController extends Controller
         return view('home')->with('users',$users);
     }
 
-    public function editUser($params)
-    {
-        $users = App\User::findOrFail($params['id']);
+    public function editUser(Request $request)
 
-        if($params['azione'] == 'elimina') {
+    {
+        $users = User::findOrFail($request->input('id'));
+
+        if($request->input('azione') == 'elimina') {
             $users->delete();
-        } elseif ($params['azione'] == 'rendiadmin') {
+        } elseif ($request->input('azione') == 'rendiadmin') {
             $users->role = 'admin';
             $users->save();
         }
 
-        return view('home');
+        return redirect()->route('home');
     }
 
 
