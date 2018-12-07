@@ -31,7 +31,7 @@
                                             {{ Form::open(array('route' => 'editUser')) }}
                                             {{ Form::hidden('id', $user->id)  }}
                                             {{ Form::select('azione', array('rendiadmin' => 'Rendi admin', 'elimina' => 'Elimina')) }}
-                                            {{ Form::submit('Esegui', ['class' => 'btn btn-danger btn-esegui']) }}
+                                            {{ Form::submit('Modifica', ['class' => 'btn btn-danger btn-esegui']) }}
                                             {{ Form::close() }}
 
                                         @endif
@@ -58,14 +58,14 @@
                     <div class="panel panel-default">
 
                         <div class="panel-heading">
-                            <h4> {{$table['nome'] }}</h4>
+                            <h3>Tabella:  {{$table['nome'] }}</h3>
 
                             <table class="table">
                                 <thead>
                                 <tr>
-                                    <th scope="col">Nome</th>
-                                    <th scope="col">Descrizione</th>
-                                    <th scope="col">Tipo</th>
+                                    <th scope="col">Nome tabella</th>
+                                    <th scope="col">Descrizione tabella</th>
+                                    <th scope="col">Tipo di tabella</th>
                                     <th scope="col"></th>
                                 </tr>
                                 </thead>
@@ -73,10 +73,10 @@
                                     <tr>
                                         {{ Form::open(array('route' => 'editTabella')) }}
                                             {{ Form::hidden('id', $table['id'])  }}
-                                            {{ Form::hidden('azione', 'editTabella')  }}
-                                            <td>{{ Form::text('nome', $table['nome'])  }}</td>
-                                            <td>{{ Form::text('descrizione', $table['descrizione'])  }}</td>
-                                            <td>{{ Form::text('tipo', $table['tipo'])  }}</td>
+                                            {{ Form::hidden('azione', 'tabella')  }}
+                                            <td>{{ Form::text('nome', $table['nome'], array('class' => 'form-control'))  }}</td>
+                                            <td>{{ Form::text('descrizione', $table['descrizione'], array('class' => 'form-control'))  }}</td>
+                                            <td><b>{!! str_replace('_', ' ', ucfirst($table['tipo'])) !!}</b></td>
                                             <td>{{ Form::submit('Salva', ['class' => 'btn btn-danger']) }}</td>
                                         {{ Form::close() }}
                                     </tr>
@@ -85,12 +85,16 @@
                         </div>
 
                         <div class="panel-body">
+
+                            <h4>OPZIONI</h4>
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Nome</th>
-                                        <th scope="col">Valore</th>
-                                        <th scope="col">Tipo</th>
+                                        <th scope="col">Opzione</th>
+                                        @if ($table['tipo'] != 'risposte_fisse')
+                                            <th scope="col">Tipo di opzione</th>
+                                        @endif
+                                        <th scope="col">Valore opzione</th>
                                         <th scope="col"></th>
                                     </tr>
                                 </thead>
@@ -101,22 +105,32 @@
                                         <tr>
                                             {{ Form::open(array('route' => 'editTabella')) }}
                                             {{ Form::hidden('id', $option['id'])  }}
-                                            {{ Form::hidden('azione', 'editOpzione')  }}
-                                            <td>{{ Form::text('nome', $option['nome'])  }}</td>
-                                            <td>{{ Form::text('tipo', $option['tipo'])  }}</td>
-                                            <td>{{ Form::text('valore', $option['valore'])  }}</td>
+                                            {{ Form::hidden('azione', 'opzione')  }}
+                                            <td>{{ Form::text('nome', $option['nome'], array('class' => 'form-control'))  }}</td>
+                                            @if ($table['tipo'] != 'risposte_fisse')
+                                                <td>{{ Form::text('tipo', $option['tipo'], array('class' => 'form-control'))  }}</td>
+                                            @endif
+                                            <td>{{ Form::text('valore', $option['valore'], array('class' => 'form-control'))  }}</td>
                                             <td>{{ Form::submit('Salva', ['class' => 'btn btn-danger']) }}</td>
                                             {{ Form::close() }}
                                         </tr>
 
                                     @endforeach
 
-                                    <tr>
+
                                         <td>
-                                            <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#aggiungiOpzione">
-                                                Aggiungi un'opzione
+                                            <br>
+                                            <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#aggiungiOpzione">
+                                               Aggiungi un'opzione
                                             </button>
+                                            <br><br>
+                                            {{ Form::open(array('route' => 'editTabella')) }}
+                                            {{ Form::hidden('id', $table['id'])  }}
+                                            {{ Form::hidden('azione', 'cancella_tabella')  }}
+                                            {{ Form::submit('Elimina tabella', ['class' => 'btn btn-danger']) }}
+                                            {{ Form::close() }}
                                         </td>
+                                        <td></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -130,7 +144,7 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 {{ Form::open(array('route' => 'editTabella', 'class' => 'form-horizontal')) }}
-                                {{ Form::hidden('azione', 'addOpzione')  }}
+                                {{ Form::hidden('azione', 'opzione')  }}
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                     <h4 class="modal-title" id="myModalLabel">Aggiungi un'opzione alla tabella</h4>
@@ -140,19 +154,23 @@
                                     <div class="form-group">
                                         <label for="nome" class="col-sm-2 control-label">Nome</label>
                                         <div class="col-sm-10">
-                                            {{ Form::text('nome', "Inserisci il nome dell'opzione", array('class' => 'form-control'))  }}
+                                            {{ Form::text('nome', "", array('class' => 'form-control'))  }}
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="tipo" class="col-sm-2 control-label">Nome</label>
-                                        <div class="col-sm-10">
-                                            {{ Form::select('tipo', array('punteggio' => 'Punteggio', 'integer' => 'Numero', 'select' => 'Scelta multipla', 'text' => 'Testo'), 'punteggio', array('class' => 'form-control'))  }}
+                                    @if ($table['tipo'] != 'risposte_fisse')
+                                        <div class="form-group">
+                                            <label for="tipo" class="col-sm-2 control-label">Tipo</label>
+                                            <div class="col-sm-10">
+                                                {{ Form::select('tipo', array('punteggio' => 'Punteggio', 'integer' => 'Numero', 'select' => 'Scelta multipla', 'text' => 'Testo'), 'punteggio', array('class' => 'form-control'))  }}
+                                            </div>
                                         </div>
-                                    </div>
+                                    @else
+                                        {{ Form::hidden('tipo', 'punteggio')  }}
+                                    @endif
                                     <div class="form-group">
-                                        <label for="valore" class="col-sm-2 control-label">Nome</label>
+                                        <label for="valore" class="col-sm-2 control-label">Valore</label>
                                         <div class="col-sm-10">
-                                            {{ Form::text('valore', 'Valore dell\'opzione. In caso di scelta multipla separa con "_" (es. Valore 1_Valore 2_Valore 3)', array('class' => 'form-control'))  }}
+                                            {{ Form::text('valore', '', array('class' => 'form-control', 'placeholder' => 'In scelta multipla separa con "_" (es. Valore 1_Valore 2_Valore 3)'))  }}
                                         </div>
                                     </div>
                                 </div>
@@ -214,7 +232,7 @@
             </div>
         </div>
 
-
+        <br><br>
 
 
 

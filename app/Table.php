@@ -12,7 +12,7 @@ class Table extends Model
 
     public function options()
     {
-        return $this->hasMany('Options');
+        return $this->hasMany('App\Options');
     }
 
 }

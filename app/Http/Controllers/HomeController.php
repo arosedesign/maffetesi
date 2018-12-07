@@ -33,19 +33,17 @@ class HomeController extends Controller
 
         $tabelle = array();
         foreach ($tables as $t) {
-            $tabelle[$t]['id'] = $t->id;
-            $tabelle[$t]['nome'] = $t->nome;
-            $tabelle[$t]['descrizione'] = $t->descrizione;
-            $tabelle[$t]['tipo'] = $t->tipo;
-            $tabelle[$t]['opzioni'] = array();
+            $tabelle[$t->id]['id'] = $t->id;
+            $tabelle[$t->id]['nome'] = $t->nome;
+            $tabelle[$t->id]['descrizione'] = $t->descrizione;
+            $tabelle[$t->id]['tipo'] = $t->tipo;
+            $tabelle[$t->id]['opzioni'] = array();
 
-            $temp_options = $t->options;
-
-            foreach ($temp_options as $option) {
-                $tabelle[$t]['opzioni'][$option->id]['id'] = $option->id;
-                $tabelle[$t]['opzioni'][$option->id]['nome'] = $option->nome;
-                $tabelle[$t]['opzioni'][$option->id]['tipo'] = $option->tipo;
-                $tabelle[$t]['opzioni'][$option->id]['valore'] = $option->valore;
+            foreach ($t->options as $option) {
+                $tabelle[$t->id]['opzioni'][$option->id]['id'] = $option->id;
+                $tabelle[$t->id]['opzioni'][$option->id]['nome'] = $option->nome;
+                $tabelle[$t->id]['opzioni'][$option->id]['tipo'] = $option->tipo;
+                $tabelle[$t->id]['opzioni'][$option->id]['valore'] = $option->valore;
             }
 
         }
@@ -82,6 +80,18 @@ class HomeController extends Controller
                 [
                     'nome' => $request->input('nome'),
                     'descrizione' => $request->input('descrizione'),
+                    'tipo' => $request->input('tipo')
+                ]
+            );
+        }
+
+        if($request->input('azione') == 'opzione') {
+            $opzione = Options::updateOrCreate(
+                ['id' => $request->input('id')],
+                [
+                    'nome' => $request->input('nome'),
+                    'table_id' => $request->input('table_id'),
+                    'valore' => $request->input('valore'),
                     'tipo' => $request->input('tipo')
                 ]
             );
