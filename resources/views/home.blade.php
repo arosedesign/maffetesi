@@ -87,9 +87,11 @@
 
                         <div class="panel-body">
 
-                            <h4>OPZIONI</h4>
+                            <div class="blocco_opzioni">
 
-                            @foreach ($table['opzioni'] as $option)
+                                <h4>OPZIONI</h4>
+
+                                @foreach ($table['opzioni'] as $option)
 
                                     {{ Form::open(array('route' => 'editTabella', 'class' => 'form-inline')) }}
                                     {{ Form::hidden('id', $option['id'])  }}
@@ -117,37 +119,125 @@
                                     {{ Form::close() }}
 
                                     <div class="deletebtn form-group">
-                                        {{ Form::open(array('route' => 'delete')) }}
-                                        {{ Form::hidden('id', $table['id'])  }}
-                                        {{ Form::hidden('azione', 'opzione')  }}
-                                        {{ Form::submit('X', ['class' => 'btn btn-danger']) }}
-                                        {{ Form::close() }}
+                                        <button type="button" class="btn btn-danger btn-md" data-toggle="modal" data-target="#eliminaOpzione-{{$option['id']}}">
+                                            X
+                                        </button>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="eliminaOpzione-{{$option['id']}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        <h4 class="modal-title" id="myModalLabel">Sei sicuro di voler eliminare l'opzione?</h4>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        {{ Form::open(array('route' => 'delete')) }}
+                                                        {{ Form::hidden('id', $option['id'])  }}
+                                                        {{ Form::hidden('azione', 'opzione')  }}
+                                                        {{ Form::submit('Elimina', ['class' => 'btn btn-danger']) }}
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
+                                                        {{ Form::close() }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                <br>
+                                    <br>
 
-                            @endforeach
+                                @endforeach
+
+                                <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#aggiungiOpzione">
+                                   Aggiungi un'opzione
+                                </button>
+
+                            </div>
+
+                            <hr>
+
+                            <div class="blocco_domande">
+
+                                <h4>DOMANDE</h4>
+
+                                @foreach ($table['domande'] as $domanda)
+
+                                    {{ Form::open(array('route' => 'editTabella', 'class' => 'form-inline')) }}
+                                    {{ Form::hidden('id', $domanda['id'])  }}
+                                    {{ Form::hidden('table_id', $table['id'])  }}
+                                    {{ Form::hidden('azione', 'domanda')  }}
+                                    <div class="form-group">
+                                        {{ Form::text('domanda', $domanda['domanda'], array('class' => 'form-control'))  }}
+                                    </div>
+
+                                    <div class="form-group">
+                                        {{ Form::submit('Salva', ['class' => 'btn btn-primary']) }}
+                                    </div>
+                                    {{ Form::close() }}
+
+                                    <div class="deletebtn form-group">
+                                        <button type="button" class="btn btn-danger btn-md" data-toggle="modal" data-target="#eliminaOpzione-{{$domanda['id']}}">
+                                            X
+                                        </button>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="eliminaOpzione-{{$domanda['id']}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        <h4 class="modal-title" id="myModalLabel">Sei sicuro di voler eliminare la domanda?</h4>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        {{ Form::open(array('route' => 'delete')) }}
+                                                        {{ Form::hidden('id', $domanda['id'])  }}
+                                                        {{ Form::hidden('azione', 'domanda')  }}
+                                                        {{ Form::submit('Elimina', ['class' => 'btn btn-danger']) }}
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
+                                                        {{ Form::close() }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+
+                                @endforeach
+
+                                <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#aggiungiDomanda">
+                                    Aggiungi una domanda
+                                </button>
+
+                            </div>
 
 
-                            <br>
-                            <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#aggiungiOpzione">
-                               Aggiungi un'opzione
+
+                            <button type="button" class="btn btn-danger btn-md" data-toggle="modal" data-target="#eliminaTabella-{{$table['id']}}">
+                                Elimina tabella
                             </button>
 
-
-
-
-
-
-
-
-
-                            <br><br>
-                            {{ Form::open(array('route' => 'delete')) }}
-                            {{ Form::hidden('id', $table['id'])  }}
-                            {{ Form::hidden('azione', 'tabella')  }}
-                            {{ Form::submit('Elimina tabella', ['class' => 'btn btn-danger']) }}
-                            {{ Form::close() }}
-
+                            <!-- Modal -->
+                            <div class="modal fade" id="eliminaTabella-{{$table['id']}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="myModalLabel">Sei sicuro di voler eliminare la tabella?</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Attenzione! Anche tutte le opzioni e le domande verranno eliminate.</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            {{ Form::open(array('route' => 'delete')) }}
+                                            {{ Form::hidden('id', $domanda['id'])  }}
+                                            {{ Form::hidden('azione', 'domanda')  }}
+                                            {{ Form::submit('Elimina', ['class' => 'btn btn-danger']) }}
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
+                                            {{ Form::close() }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         </div>
 
@@ -186,6 +276,33 @@
                                         <label for="valore" class="col-sm-2 control-label">Valore</label>
                                         <div class="col-sm-10">
                                             {{ Form::text('valore', '', array('class' => 'form-control', 'placeholder' => 'In scelta multipla separa con "_" (es. Valore 1_Valore 2_Valore 3)'))  }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    {{ Form::submit('Salva', ['class' => 'btn btn-primary']) }}
+                                    {{ Form::close() }}
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="aggiungiDomanda" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                {{ Form::open(array('route' => 'editTabella', 'class' => 'form-horizontal')) }}
+                                {{ Form::hidden('azione', 'domanda')  }}
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">Aggiungi una domanda alla tabella</h4>
+                                </div>
+                                <div class="modal-body">
+                                    {{ Form::hidden('table_id', $table['id'])  }}
+                                    <div class="form-group">
+                                        <div class="col-sm-10">
+                                            {{ Form::text('domanda', "", array('class' => 'form-control'))  }}
                                         </div>
                                     </div>
                                 </div>

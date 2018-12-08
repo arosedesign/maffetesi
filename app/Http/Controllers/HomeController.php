@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Domande;
 use App\Options;
 use App\Table;
 use Illuminate\Http\Request;
@@ -44,6 +45,11 @@ class HomeController extends Controller
                 $tabelle[$t->id]['opzioni'][$option->id]['nome'] = $option->nome;
                 $tabelle[$t->id]['opzioni'][$option->id]['tipo'] = $option->tipo;
                 $tabelle[$t->id]['opzioni'][$option->id]['valore'] = $option->valore;
+            }
+
+            foreach ($t->domande as $domanda) {
+                $tabelle[$t->id]['domande'][$domanda->id]['id'] = $domanda->id;
+                $tabelle[$t->id]['domande'][$domanda->id]['domanda'] = $domanda->domanda;
             }
 
         }
@@ -100,5 +106,39 @@ class HomeController extends Controller
         return redirect()->route('home');
     }
 
+    public function delete(Request $request)
+
+    {
+
+        if($request->input('azione') == 'opzione') {
+            $opzione = Options::find($request->input('id'));
+            $opzione->delete();
+
+        }
+
+        if($request->input('azione') == 'domanda') {
+            $domanda = Domande::find($request->input('id'));
+            $domanda->delete();
+
+        }
+
+        if($request->input('azione') == 'tabella') {
+
+            $tabella = Table::find($request->input('id'));
+
+            foreach ($tabella->options as $opzione) {
+                $opzione->delete();
+            }
+
+            foreach ($tabella->domande as $domanda) {
+                $domanda->delete();
+            }
+
+            $tabella->delete();
+
+        }
+
+        return redirect()->route('home');
+    }
 
 }
