@@ -8,7 +8,7 @@ class Domande extends Model
 {
     protected $table = 'domande';
 
-    protected $fillable = array('id', 'domanda', 'table_id');
+    protected $fillable = array('id', 'domanda', 'table_id', 'valori');
 
     public function table()
     {

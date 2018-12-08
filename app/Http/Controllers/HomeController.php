@@ -39,6 +39,7 @@ class HomeController extends Controller
             $tabelle[$t->id]['descrizione'] = $t->descrizione;
             $tabelle[$t->id]['tipo'] = $t->tipo;
             $tabelle[$t->id]['opzioni'] = array();
+            $tabelle[$t->id]['domande'] = array();
 
             foreach ($t->options as $option) {
                 $tabelle[$t->id]['opzioni'][$option->id]['id'] = $option->id;
@@ -50,6 +51,7 @@ class HomeController extends Controller
             foreach ($t->domande as $domanda) {
                 $tabelle[$t->id]['domande'][$domanda->id]['id'] = $domanda->id;
                 $tabelle[$t->id]['domande'][$domanda->id]['domanda'] = $domanda->domanda;
+                $tabelle[$t->id]['domande'][$domanda->id]['valori'] = $domanda->valori;
             }
 
         }
@@ -99,6 +101,17 @@ class HomeController extends Controller
                     'table_id' => $request->input('table_id'),
                     'valore' => $request->input('valore'),
                     'tipo' => $request->input('tipo')
+                ]
+            );
+        }
+
+        if($request->input('azione') == 'domanda') {
+            $opzione = Domande::updateOrCreate(
+                ['id' => $request->input('id')],
+                [
+                    'domanda' => $request->input('domanda'),
+                    'table_id' => $request->input('table_id'),
+                    'valori' => $request->input('valori')
                 ]
             );
         }

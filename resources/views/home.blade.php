@@ -28,9 +28,9 @@
                                     <td>
                                         @if(Auth::user()->id != $user->id)
 
-                                            {{ Form::open(array('route' => 'editUser')) }}
+                                            {{ Form::open(array('route' => 'editUser', 'class' => 'form-inline',)) }}
                                             {{ Form::hidden('id', $user->id)  }}
-                                            {{ Form::select('azione', array('rendiadmin' => 'Rendi admin', 'elimina' => 'Elimina')) }}
+                                            {{ Form::select('azione', array('rendiadmin' => 'Rendi admin', 'elimina' => 'Elimina'), 'rendiadmin', array('class' => 'form-control'))  }}
                                             {{ Form::submit('Modifica', ['class' => 'btn btn-primary btn-esegui']) }}
                                             {{ Form::close() }}
 
@@ -50,11 +50,11 @@
 
             <div class="col-md-12">
 
-
                 <h2>Gestione tabelle</h2>
+            </div>
 
                 @foreach ($tables as $table)
-
+                <div class="col-md-12">
                     <div class="panel panel-default">
 
                         <div class="panel-heading">
@@ -93,32 +93,44 @@
 
                                 @foreach ($table['opzioni'] as $option)
 
-                                    {{ Form::open(array('route' => 'editTabella', 'class' => 'form-inline')) }}
+                                    {{ Form::open(array('route' => 'editTabella', 'class' => 'form-inline', 'style' => 'display: list-item; list-style-type: none;')) }}
                                     {{ Form::hidden('id', $option['id'])  }}
                                     {{ Form::hidden('table_id', $table['id'])  }}
                                     {{ Form::hidden('azione', 'opzione')  }}
-                                    <div class="form-group">
-                                        <label for="nome">Nome</label>
+                                    <div class="col-sm-2">
+                                        @if ($loop->first)
+                                            <label for="nome">Nome</label>
+                                        @endif
                                         {{ Form::text('nome', $option['nome'], array('class' => 'form-control'))  }}
                                     </div>
 
                                     @if ($table['tipo'] != 'risposte_fisse')
-                                        <div class="form-group">
-                                            <label for="tipo">Tipo</label>
-                                            {{ Form::text('tipo', $option['tipo'], array('class' => 'form-control'))  }}
+                                        <div class="col-sm-2">
+                                            @if ($loop->first)
+                                                <label for="tipo">Tipo</label>
+                                            @endif
+                                            {{ Form::select('tipo', array('select' => 'Scelta multipla', 'integer' => 'Numero', 'text' => 'Testo'), $option['tipo'], array('class' => 'form-control'))  }}
                                         </div>
                                     @endif
 
-                                    <div class="form-group">
-                                        <label for="nome">Valore</label>
+                                    <div class="col-sm-2">
+                                        @if ($loop->first)
+                                            <label for="valore">Ordine</label>
+                                        @endif
                                         {{ Form::text('valore', $option['valore'], array('class' => 'form-control'))  }}
                                     </div>
-                                    <div class="form-group">
+                                    <div class="col-sm-2">
+                                        @if ($loop->first)
+                                            <br>
+                                        @endif
                                         {{ Form::submit('Salva', ['class' => 'btn btn-primary']) }}
                                     </div>
                                     {{ Form::close() }}
 
                                     <div class="deletebtn form-group">
+                                        @if ($loop->first)
+                                            <br>
+                                        @endif
                                         <button type="button" class="btn btn-danger btn-md" data-toggle="modal" data-target="#eliminaOpzione-{{$option['id']}}">
                                             X
                                         </button>
@@ -147,70 +159,89 @@
 
                                 @endforeach
 
-                                <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#aggiungiOpzione">
+                                <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#aggiungiOpzione-{{$table['id'] }}">
                                    Aggiungi un'opzione
                                 </button>
 
-                            </div>
 
-                            <hr>
+                                </div>
 
-                            <div class="blocco_domande">
+                            @if ($table['tipo'] != 'risposte_variabili')
 
-                                <h4>DOMANDE</h4>
+                                <hr>
+                                <div class="blocco_domande">
 
-                                @foreach ($table['domande'] as $domanda)
+                                    <h4>DOMANDE</h4>
 
-                                    {{ Form::open(array('route' => 'editTabella', 'class' => 'form-inline')) }}
-                                    {{ Form::hidden('id', $domanda['id'])  }}
-                                    {{ Form::hidden('table_id', $table['id'])  }}
-                                    {{ Form::hidden('azione', 'domanda')  }}
-                                    <div class="form-group">
-                                        {{ Form::text('domanda', $domanda['domanda'], array('class' => 'form-control'))  }}
-                                    </div>
+                                    @foreach ($table['domande'] as $domanda)
 
-                                    <div class="form-group">
-                                        {{ Form::submit('Salva', ['class' => 'btn btn-primary']) }}
-                                    </div>
-                                    {{ Form::close() }}
+                                        {{ Form::open(array('route' => 'editTabella', 'class' => 'form-inline', 'style' => 'display: list-item; list-style-type: none;')) }}
+                                        {{ Form::hidden('id', $domanda['id'])  }}
+                                        {{ Form::hidden('table_id', $table['id'])  }}
+                                        {{ Form::hidden('azione', 'domanda')  }}
+                                        <div class="col-sm-6">
+                                            @if ($loop->first)
+                                                <label for="domanda">Domande</label>
+                                            @endif
 
-                                    <div class="deletebtn form-group">
-                                        <button type="button" class="btn btn-danger btn-md" data-toggle="modal" data-target="#eliminaOpzione-{{$domanda['id']}}">
-                                            X
-                                        </button>
+                                                {{ Form::text('domanda', $domanda['domanda'], array('class' => 'input_domanda form-control'))  }}
+                                         </div>
+                                         <div class="col-sm-2">
+                                             @if ($loop->first)
+                                                 <label for="valori">Valori</label>
+                                             @endif
+                                            {{ Form::text('valori', $domanda['valori'], array('class' => 'form-control', 'placeholder' => 'valori ordinati separati da,',))  }}
 
-                                        <!-- Modal -->
-                                        <div class="modal fade" id="eliminaOpzione-{{$domanda['id']}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                        <h4 class="modal-title" id="myModalLabel">Sei sicuro di voler eliminare la domanda?</h4>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        {{ Form::open(array('route' => 'delete')) }}
-                                                        {{ Form::hidden('id', $domanda['id'])  }}
-                                                        {{ Form::hidden('azione', 'domanda')  }}
-                                                        {{ Form::submit('Elimina', ['class' => 'btn btn-danger']) }}
-                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
-                                                        {{ Form::close() }}
+                                         </div>
+                                          <div class="col-sm-2">
+                                              @if ($loop->first)
+                                                  <br>
+                                              @endif
+                                            {{ Form::submit('Salva', ['class' => 'btn btn-primary']) }}
+                                           </div>
+                                        {{ Form::close() }}
+
+                                        <div class="deletebtn form-group">
+                                            @if ($loop->first)
+                                                <br>
+                                            @endif
+                                            <button type="button" class="btn btn-danger btn-md" data-toggle="modal" data-target="#eliminaDomanda-{{$domanda['id']}}">
+                                                X
+                                            </button>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="eliminaDomanda-{{$domanda['id']}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                            <h4 class="modal-title" id="myModalLabel">Sei sicuro di voler eliminare la domanda?</h4>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            {{ Form::open(array('route' => 'delete')) }}
+                                                            {{ Form::hidden('id', $domanda['id'])  }}
+                                                            {{ Form::hidden('azione', 'domanda')  }}
+                                                            {{ Form::submit('Elimina', ['class' => 'btn btn-danger']) }}
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
+                                                            {{ Form::close() }}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <br>
+                                        <br>
 
-                                @endforeach
+                                    @endforeach
+                                    <br><br>
+                                    <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#aggiungiDomanda-{{$table['id'] }}">
+                                        Aggiungi una domanda
+                                    </button>
 
-                                <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#aggiungiDomanda">
-                                    Aggiungi una domanda
-                                </button>
+                                </div>
 
-                            </div>
+                            @endif
 
-
-
+                            <br>
                             <button type="button" class="btn btn-danger btn-md" data-toggle="modal" data-target="#eliminaTabella-{{$table['id']}}">
                                 Elimina tabella
                             </button>
@@ -228,8 +259,8 @@
                                         </div>
                                         <div class="modal-footer">
                                             {{ Form::open(array('route' => 'delete')) }}
-                                            {{ Form::hidden('id', $domanda['id'])  }}
-                                            {{ Form::hidden('azione', 'domanda')  }}
+                                            {{ Form::hidden('id', $table['id'])  }}
+                                            {{ Form::hidden('azione', 'tabella')  }}
                                             {{ Form::submit('Elimina', ['class' => 'btn btn-danger']) }}
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
                                             {{ Form::close() }}
@@ -245,7 +276,7 @@
 
 
                     <!-- Modal -->
-                    <div class="modal fade" id="aggiungiOpzione" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal fade" id="aggiungiOpzione-{{$table['id'] }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 {{ Form::open(array('route' => 'editTabella', 'class' => 'form-horizontal')) }}
@@ -266,16 +297,16 @@
                                         <div class="form-group">
                                             <label for="tipo" class="col-sm-2 control-label">Tipo</label>
                                             <div class="col-sm-10">
-                                                {{ Form::select('tipo', array('punteggio' => 'Punteggio', 'integer' => 'Numero', 'select' => 'Scelta multipla', 'text' => 'Testo'), 'punteggio', array('class' => 'form-control'))  }}
+                                                {{ Form::select('tipo', array('select' => 'Scelta multipla', 'integer' => 'Numero', 'text' => 'Testo'), 'punteggio', array('class' => 'form-control'))  }}
                                             </div>
                                         </div>
                                     @else
                                         {{ Form::hidden('tipo', 'punteggio')  }}
                                     @endif
                                     <div class="form-group">
-                                        <label for="valore" class="col-sm-2 control-label">Valore</label>
+                                        <label for="valore" class="col-sm-2 control-label">Ordine</label>
                                         <div class="col-sm-10">
-                                            {{ Form::text('valore', '', array('class' => 'form-control', 'placeholder' => 'In scelta multipla separa con "_" (es. Valore 1_Valore 2_Valore 3)'))  }}
+                                            {{ Form::text('valore', '', array('class' => 'form-control', 'placeholder' => 'Scelta multipla: Valore 1_Valore 2, Numero: min-max'))  }}
                                         </div>
                                     </div>
                                 </div>
@@ -289,7 +320,7 @@
                     </div>
 
                     <!-- Modal -->
-                    <div class="modal fade" id="aggiungiDomanda" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal fade" id="aggiungiDomanda-{{$table['id'] }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 {{ Form::open(array('route' => 'editTabella', 'class' => 'form-horizontal')) }}
@@ -301,8 +332,13 @@
                                 <div class="modal-body">
                                     {{ Form::hidden('table_id', $table['id'])  }}
                                     <div class="form-group">
-                                        <div class="col-sm-10">
-                                            {{ Form::text('domanda', "", array('class' => 'form-control'))  }}
+                                        <div class="col-sm-12">
+                                            <label for="domanda">Domanda</label>
+                                            {{ Form::text('domanda', "", array('class' => 'form-control input_domanda'))  }}
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <label for="valori">Valori</label>
+                                            {{ Form::text('valori', '', array('class' => 'form-control', 'placeholder' => 'valori ordinati separati da,',))  }}
                                         </div>
                                     </div>
                                 </div>
@@ -315,14 +351,17 @@
                         </div>
                     </div>
 
-                @endforeach
+            @endforeach
 
+            <br>
+            <div class="col-md-9 col-md-offset-1">
                 <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#aggiungiTabella">
                     Aggiungi una tabella
                 </button>
-
+                <br><br>
             </div>
-        </div>
+
+
 
         <!-- Modal -->
         <div class="modal fade" id="aggiungiTabella" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

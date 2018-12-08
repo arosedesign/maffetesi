@@ -9,5 +9,11 @@
   .deletebtn.form-group,
   .form-inline {
     display: inline-block;
+    .input_domanda {
+      width: 700px;
+    }
+    div {
+      margin: 0 10px;
+    }
   }
 }
