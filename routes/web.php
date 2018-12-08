@@ -10,13 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
+Route::get('/', 'QuizController@index')->name('index');
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/home/edit-user', 'HomeController@editUser')->name('editUser');
 Route::post('/home/edit-tabella', 'HomeController@editTabella')->name('editTabella');

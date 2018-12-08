@@ -111,6 +111,8 @@
                                             @endif
                                             {{ Form::select('tipo', array('select' => 'Scelta multipla', 'integer' => 'Numero', 'text' => 'Testo'), $option['tipo'], array('class' => 'form-control'))  }}
                                         </div>
+                                    @else
+                                    {{ Form::hidden('tipo', 'punteggio')  }}
                                     @endif
 
                                     <div class="col-sm-2">
