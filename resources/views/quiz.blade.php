@@ -1,95 +1,78 @@
-<!doctype html>
-<html lang="{{ app()->getLocale() }}">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts.quiz')
 
-        <title>Laravel</title>
+@section('content')
+    <div class="container frontend">
+        <h1 class="text-center">{{ $testo['titolo']['descrizione'] }}</h1>
+        <h4 class="text-center">{{ $testo['sottotitolo']['descrizione'] }}</h4>
+        <br><br>
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+        <div class="row gestionedomande">
+            <div class="col-md-8 col-md-offset-2">
 
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Raleway', sans-serif;
-                font-weight: 100;
-                height: 100vh;
-                margin: 0;
-            }
+                {{ Form::open(array('route' => 'editTabella')) }}
 
-            .full-height {
-                height: 100vh;
-            }
 
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
+                @foreach ($profilazione as $pr)
 
-            .position-ref {
-                position: relative;
-            }
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4>{{ $pr['nome'] }}</h4>
+                            </div>
 
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
+                            <div class="panel-body">
+                                @if ($pr['tipo'] == 'text')
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+                                            {{ Form::text('opzione-'.$pr['id'], '', array('class' => 'form-control', 'placeholder' => $pr['nome'],'required' => 'required'))  }}
+                                        </div>
+                                    </div>
+                                @elseif ($pr['tipo'] == 'integer')
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+                                            {{ Form::number('opzione-'.$pr['id'], '', array('class' => 'form-control', 'min' => $pr['valore'][0], 'max' => $pr['valore'][1], 'placeholder' => $pr['nome'],'required' => 'required'))  }}
+                                        </div>
+                                    </div>
+                                @elseif ($pr['tipo'] == 'select')
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+                                            {{ Form::select('opzione-'.$pr['id'], $pr['valore'], false, array('class' => 'form-control', 'placeholder' => $pr['nome'],'required' => 'required'))  }}
+                                        </div>
+                                    </div>
+                                @endif
 
-            .content {
-                text-align: center;
-            }
 
-            .title {
-                font-size: 84px;
-            }
+                            </div>
+                        </div>
+                    @endforeach
 
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 12px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
+                <hr><br>
 
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-                        <a href="{{ route('register') }}">Register</a>
-                    @endauth
-                </div>
-            @endif
+                    @foreach ($domande as $domanda)
 
-            <div class="content">
-                <div class="title m-b-md">
-                    Laravel
-                </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4>{{ $domanda['domanda'] }}</h4>
+                            </div>
 
-                <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
+                            <div class="panel-body">
+
+                                @foreach ($domanda['opzioni'] as $opzione)
+                                    <label class="radio-inline">
+                                        {{ Form::radio('domanda-'.$domanda['id'], $domanda['valori'][$opzione['valore']], false, ['required' => 'required'])  }}
+                                        {{ $opzione['nome'] }}
+                                    </label>
+                                @endforeach
+
+                            </div>
+                        </div>
+                    @endforeach
+
+                {{ Form::submit('Completa il questionario', ['class' => 'btn btn-primary']) }}
+                {{ Form::close() }}
+
+                <br><br>
             </div>
         </div>
-    </body>
-</html>
+    </div>
+@endsection
+

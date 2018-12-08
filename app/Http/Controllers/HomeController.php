@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Domande;
+use App\Impostazioni;
 use App\Options;
 use App\Table;
 use Illuminate\Http\Request;
@@ -31,6 +32,7 @@ class HomeController extends Controller
     {
         $users = User::all();
         $tables = Table::all();
+        $impostazioni = Impostazioni::all();
 
         $tabelle = array();
         foreach ($tables as $t) {
@@ -58,7 +60,8 @@ class HomeController extends Controller
 
         return view('home')->with([
             'users' => $users,
-            'tables' => $tabelle
+            'tables' => $tabelle,
+            'impostazioni' => $impostazioni
         ]);
 
     }

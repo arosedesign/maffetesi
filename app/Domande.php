@@ -12,6 +12,6 @@ class Domande extends Model
 
     public function table()
     {
-        return $this->hasOne('App\Table');
+        return $this->belongsTO('App\Table','table_id', 'id');
     }
 }

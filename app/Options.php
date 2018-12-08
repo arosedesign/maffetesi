@@ -12,6 +12,6 @@ class Options extends Model
 
     public function table()
     {
-        return $this->hasMany('App\Table');
+        return $this->belongsTO('App\Table','table_id');
     }
 }
