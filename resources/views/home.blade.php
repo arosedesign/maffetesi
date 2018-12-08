@@ -31,7 +31,7 @@
                                             {{ Form::open(array('route' => 'editUser')) }}
                                             {{ Form::hidden('id', $user->id)  }}
                                             {{ Form::select('azione', array('rendiadmin' => 'Rendi admin', 'elimina' => 'Elimina')) }}
-                                            {{ Form::submit('Modifica', ['class' => 'btn btn-danger btn-esegui']) }}
+                                            {{ Form::submit('Modifica', ['class' => 'btn btn-primary btn-esegui']) }}
                                             {{ Form::close() }}
 
                                         @endif
@@ -60,80 +60,95 @@
                         <div class="panel-heading">
                             <h3>Tabella:  {{$table['nome'] }}</h3>
 
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th scope="col">Nome tabella</th>
-                                    <th scope="col">Descrizione tabella</th>
-                                    <th scope="col">Tipo di tabella</th>
-                                    <th scope="col"></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        {{ Form::open(array('route' => 'editTabella')) }}
-                                            {{ Form::hidden('id', $table['id'])  }}
-                                            {{ Form::hidden('azione', 'tabella')  }}
-                                            <td>{{ Form::text('nome', $table['nome'], array('class' => 'form-control'))  }}</td>
-                                            <td>{{ Form::text('descrizione', $table['descrizione'], array('class' => 'form-control'))  }}</td>
-                                            <td><b>{!! str_replace('_', ' ', ucfirst($table['tipo'])) !!}</b></td>
-                                            <td>{{ Form::submit('Salva', ['class' => 'btn btn-danger']) }}</td>
-                                        {{ Form::close() }}
-                                    </tr>
-                                </tbody>
-                            </table>
+                            {{ Form::open(array('route' => 'editTabella', 'class' => 'form-inline')) }}
+                            {{ Form::hidden('id', $table['id'])  }}
+                            {{ Form::hidden('azione', 'tabella')  }}
+                            <div class="form-group">
+                                <label for="nome">Nome</label>
+                                {{ Form::text('nome', $table['nome'], array('class' => 'form-control'))  }}
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tipo">Descrizione</label>
+                                {{ Form::text('descrizione', $table['descrizione'], array('class' => 'form-control'))  }}
+                            </div>
+
+                            <div class="form-group">
+                                <label for="nome">Tipo: </label>
+                                <span class="tipotabella">{!! str_replace('_', ' ', ucfirst($table['tipo'])) !!}</span>
+                                {{ Form::hidden('tipo', $table['tipo'])  }}
+                            </div>
+                            <div class="form-group">
+                                {{ Form::submit('Salva', ['class' => 'btn btn-primary']) }}
+                            </div>
+                            {{ Form::close() }}
+
                         </div>
 
                         <div class="panel-body">
 
                             <h4>OPZIONI</h4>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Opzione</th>
-                                        @if ($table['tipo'] != 'risposte_fisse')
-                                            <th scope="col">Tipo di opzione</th>
-                                        @endif
-                                        <th scope="col">Valore opzione</th>
-                                        <th scope="col"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
 
-                                    @foreach ($table['opzioni'] as $option)
+                            @foreach ($table['opzioni'] as $option)
 
-                                        <tr>
-                                            {{ Form::open(array('route' => 'editTabella')) }}
-                                            {{ Form::hidden('id', $option['id'])  }}
-                                            {{ Form::hidden('azione', 'opzione')  }}
-                                            <td>{{ Form::text('nome', $option['nome'], array('class' => 'form-control'))  }}</td>
-                                            @if ($table['tipo'] != 'risposte_fisse')
-                                                <td>{{ Form::text('tipo', $option['tipo'], array('class' => 'form-control'))  }}</td>
-                                            @endif
-                                            <td>{{ Form::text('valore', $option['valore'], array('class' => 'form-control'))  }}</td>
-                                            <td>{{ Form::submit('Salva', ['class' => 'btn btn-danger']) }}</td>
-                                            {{ Form::close() }}
-                                        </tr>
+                                    {{ Form::open(array('route' => 'editTabella', 'class' => 'form-inline')) }}
+                                    {{ Form::hidden('id', $option['id'])  }}
+                                    {{ Form::hidden('table_id', $table['id'])  }}
+                                    {{ Form::hidden('azione', 'opzione')  }}
+                                    <div class="form-group">
+                                        <label for="nome">Nome</label>
+                                        {{ Form::text('nome', $option['nome'], array('class' => 'form-control'))  }}
+                                    </div>
 
-                                    @endforeach
+                                    @if ($table['tipo'] != 'risposte_fisse')
+                                        <div class="form-group">
+                                            <label for="tipo">Tipo</label>
+                                            {{ Form::text('tipo', $option['tipo'], array('class' => 'form-control'))  }}
+                                        </div>
+                                    @endif
+
+                                    <div class="form-group">
+                                        <label for="nome">Valore</label>
+                                        {{ Form::text('valore', $option['valore'], array('class' => 'form-control'))  }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ Form::submit('Salva', ['class' => 'btn btn-primary']) }}
+                                    </div>
+                                    {{ Form::close() }}
+
+                                    <div class="deletebtn form-group">
+                                        {{ Form::open(array('route' => 'delete')) }}
+                                        {{ Form::hidden('id', $table['id'])  }}
+                                        {{ Form::hidden('azione', 'opzione')  }}
+                                        {{ Form::submit('X', ['class' => 'btn btn-danger']) }}
+                                        {{ Form::close() }}
+                                    </div>
+                                <br>
+
+                            @endforeach
 
 
-                                        <td>
-                                            <br>
-                                            <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#aggiungiOpzione">
-                                               Aggiungi un'opzione
-                                            </button>
-                                            <br><br>
-                                            {{ Form::open(array('route' => 'editTabella')) }}
-                                            {{ Form::hidden('id', $table['id'])  }}
-                                            {{ Form::hidden('azione', 'cancella_tabella')  }}
-                                            {{ Form::submit('Elimina tabella', ['class' => 'btn btn-danger']) }}
-                                            {{ Form::close() }}
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <br>
+                            <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#aggiungiOpzione">
+                               Aggiungi un'opzione
+                            </button>
+
+
+
+
+
+
+
+
+
+                            <br><br>
+                            {{ Form::open(array('route' => 'delete')) }}
+                            {{ Form::hidden('id', $table['id'])  }}
+                            {{ Form::hidden('azione', 'tabella')  }}
+                            {{ Form::submit('Elimina tabella', ['class' => 'btn btn-danger']) }}
+                            {{ Form::close() }}
+
+
                         </div>
 
                     </div>
@@ -259,3 +274,7 @@
      @endif
 </div>
 @endsection
+
+
+
+

@@ -10,4 +10,8 @@ class Options extends Model
 
     protected $fillable = array('id', 'nome', 'tipo', 'valore', 'table_id');
 
+    public function table()
+    {
+        return $this->hasMany('App\Table');
+    }
 }

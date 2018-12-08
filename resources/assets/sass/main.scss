@@ -1,7 +1,13 @@
 // Variables
 @import "variables";
 
-.container.pannello .btn-esegui {
-  margin-left: 20px;
-  padding: 2px 12px;
+.container.pannello {
+  .btn-esegui {
+    margin-left: 20px;
+    padding: 2px 12px;
+  }
+  .deletebtn.form-group,
+  .form-inline {
+    display: inline-block;
+  }
 }
