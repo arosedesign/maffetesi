@@ -89,11 +89,25 @@ class QuizController extends Controller
             }
 
         }
-        return redirect()->route('index');
+        return redirect()->route('thanks');
 
+    }
+
+    public function thanks()
+    {
+
+        $impostazioni = Impostazioni::all();
+
+        $testo = array();
+        $testo['grazie'] = $impostazioni->where('nome', 'Ringraziamento')->first();
+
+        return view('thanks')->with([
+            'testo' => $testo
+        ]);
     }
 
 
 }
+
 
 
