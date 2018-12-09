@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Domande;
 use App\Impostazioni;
 use App\Options;
@@ -9,12 +10,27 @@ use App\Risposta;
 use App\Table;
 use Illuminate\Http\Request;
 use App\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Redirect;
+
 use function Psy\debug;
 
 class QuizController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+
+        $finequestionario = $request->cookie('finequestionario');
+
+        $user = Auth::user();
+
+        if(!empty($user)) {
+            if(!empty($finequestionario) and $user->role != 'admin') {
+                return Redirect::to('thanks');
+            }
+        } else if(!empty($finequestionario)) {
+            return Redirect::to('thanks');
+        }
 
         $questions = Domande::orderBy('domanda', 'ASC')->get();
         $anagrafiche = Options::where('tipo', '!=', 'punteggio')->get();
@@ -95,13 +111,15 @@ class QuizController extends Controller
             }
 
         }
-        return redirect()->route('thanks');
+
+        $minutes = 525600;
+        $current_time = Carbon::now()->toDateTimeString();
+        return Redirect::to('thanks')->withCookie(cookie('finequestionario', $current_time, $minutes));
 
     }
 
     public function thanks()
     {
-
         $impostazioni = Impostazioni::all();
 
         $testo = array();
