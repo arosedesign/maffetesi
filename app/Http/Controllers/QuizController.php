@@ -30,8 +30,14 @@ class QuizController extends Controller
             $profilazione[$anagrafica->id]['id'] = $anagrafica->id;
             $profilazione[$anagrafica->id]['nome'] = $anagrafica->nome;
             $profilazione[$anagrafica->id]['tipo'] = $anagrafica->tipo;
-            if($anagrafica->tipo != 'testo') {
+            if($anagrafica->tipo == 'integer') {
                 $profilazione[$anagrafica->id]['valore'] = explode('_', $anagrafica->valore);
+            } elseif($anagrafica->tipo == 'select') {
+                $temp = explode('_', $anagrafica->valore);
+                $profilazione[$anagrafica->id]['valore'] = array();
+                foreach ($temp as $k) {
+                    $profilazione[$anagrafica->id]['valore'][$k] = $k;
+                }
             }
         }
 
