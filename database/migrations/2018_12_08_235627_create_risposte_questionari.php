@@ -13,7 +13,7 @@ class CreateRisposteQuestionari extends Migration
      */
     public function up()
     {
-        Schema::create('impostazioni', function (Blueprint $table) {
+        Schema::create('risposte', function (Blueprint $table) {
             $table->increments('id');
 
             $table->text('utente')->nullable();
