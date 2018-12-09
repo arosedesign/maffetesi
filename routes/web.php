@@ -13,6 +13,7 @@
 Auth::routes();
 
 Route::get('/', 'QuizController@index')->name('index');
+Route::post('/salva-risposta', 'QuizController@salvaRisposta')->name('salvaRisposta');
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/home/edit-user', 'HomeController@editUser')->name('editUser');
 Route::post('/home/edit-tabella', 'HomeController@editTabella')->name('editTabella');

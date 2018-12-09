@@ -14,4 +14,9 @@ class Options extends Model
     {
         return $this->belongsTO('App\Table','table_id');
     }
+
+    public function risposte()
+    {
+        return $this->hasMany('App\Risposta');
+    }
 }

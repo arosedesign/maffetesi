@@ -14,4 +14,9 @@ class Domande extends Model
     {
         return $this->belongsTO('App\Table','table_id', 'id');
     }
+
+    public function risposte()
+    {
+        return $this->hasMany('App\Risposta');
+    }
 }

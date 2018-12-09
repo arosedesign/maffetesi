@@ -1,6 +1,15 @@
 @extends('layouts.quiz')
 
 @section('content')
+
+    <script>
+        $( document ).ready(function() {
+            $("[type=range]").on("input ", function() {
+                var id = $(this).attr('data-class');
+                $("#"+id).html($(this).val());
+            });
+        });
+    </script>
     <div class="container frontend">
         <h1 class="text-center">{{ $testo['titolo']['descrizione'] }}</h1>
         <h4 class="text-center">{{ $testo['sottotitolo']['descrizione'] }}</h4>
@@ -9,7 +18,7 @@
         <div class="row gestionedomande">
             <div class="col-md-8 col-md-offset-2">
 
-                {{ Form::open(array('route' => 'editTabella')) }}
+                {{ Form::open(array('route' => 'salvaRisposta')) }}
 
 
                 @foreach ($profilazione as $pr)
@@ -29,7 +38,8 @@
                                 @elseif ($pr['tipo'] == 'integer')
                                     <div class="form-group">
                                         <div class="col-sm-12">
-                                            {{ Form::number('opzione-'.$pr['id'], '', array('class' => 'form-control', 'min' => $pr['valore'][0], 'max' => $pr['valore'][1], 'placeholder' => $pr['nome'],'required' => 'required'))  }}
+                                            <input name="opzione-{{ $pr['id']}}" type="range" min="{{ $pr['valore'][0] }}" max="{{ $pr['valore'][1] }}" step="{{ $pr['valore'][2] }}" value="{{ $pr['valore'][0] }}" data-class="opzione-{{ $pr['id']}}" class="left">
+                                            <div id="opzione-{{ $pr['id']}}" class="range-index-wrap"><span class="range-index">{{ $pr['valore'][0] }}</span></div>
                                         </div>
                                     </div>
                                 @elseif ($pr['tipo'] == 'select')

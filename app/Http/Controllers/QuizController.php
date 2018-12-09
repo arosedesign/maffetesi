@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Domande;
 use App\Impostazioni;
 use App\Options;
+use App\Risposta;
 use App\Table;
 use Illuminate\Http\Request;
 use App\User;
@@ -57,4 +58,42 @@ class QuizController extends Controller
             'profilazione' => $profilazione
         ]);
     }
+
+    public function salvaRisposta(Request $request)
+    {
+        $lastuser = Risposta::orderBy('utente','desc')->first();
+
+        if (!empty($lastuser)) {
+            $newuser = $lastuser->utente+1;
+        } else {
+            $newuser = 1;
+        }
+
+        foreach ($request->input() as $key => $value) {
+
+            if($key !== '_token') {
+
+                if (strpos($key, 'opzione') !== false) {
+                    $risposte = Risposta::create([
+                        'utente' => $newuser,
+                        'id_opzione' => str_replace('opzione-', '', $key),
+                        'risposta' => $value
+                    ]);
+                } else {
+                    $risposte = Risposta::create([
+                        'utente' => $newuser,
+                        'id_domanda' => str_replace('domanda-', '', $key),
+                        'risposta' => $value
+                    ]);
+                }
+            }
+
+        }
+        return redirect()->route('index');
+
+    }
+
+
 }
+
+
