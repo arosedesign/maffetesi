@@ -8,5 +8,5 @@ class Impostazioni extends Model
 {
     protected $table = 'impostazioni';
 
-    protected $fillable = array('nome', 'descrizione');
+    protected $fillable = array('id','nome', 'descrizione');
 }

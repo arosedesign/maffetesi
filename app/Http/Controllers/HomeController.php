@@ -119,6 +119,15 @@ class HomeController extends Controller
             );
         }
 
+		if($request->input('azione') == 'impostazioni') {
+			$opzione = Domande::updateOrCreate(
+				['id' => $request->input('id')],
+				[
+					'descrizione' => $request->input('domanda')
+				]
+			);
+		}
+
         return redirect()->route('home');
     }
 
