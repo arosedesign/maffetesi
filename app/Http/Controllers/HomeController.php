@@ -120,10 +120,10 @@ class HomeController extends Controller
         }
 
 		if($request->input('azione') == 'impostazioni') {
-			$opzione = Domande::updateOrCreate(
+			$opzione = Impostazioni::updateOrCreate(
 				['id' => $request->input('id')],
 				[
-					'descrizione' => $request->input('domanda')
+					'descrizione' => $request->input('descrizione')
 				]
 			);
 		}

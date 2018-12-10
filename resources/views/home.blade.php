@@ -69,7 +69,7 @@
                                             {{ Form::open(array('route' => 'editTabella', 'class' => 'form-inline',)) }}
                                             {{ Form::hidden('azione', 'impostazioni')  }}
                                             {{ Form::hidden('id', $i->id)  }}
-                                            {{ Form::textarea('azione', $i->descrizione, '', array('class' => 'form-control'))  }}
+                                            {{ Form::textarea('descrizione', $i->descrizione, '', array('class' => 'form-control'))  }}
                                             <br>
                                             {{ Form::submit('Salva', ['class' => 'btn btn-primary btn-esegui']) }}
                                             {{ Form::close() }}
