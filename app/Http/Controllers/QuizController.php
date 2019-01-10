@@ -39,6 +39,7 @@ class QuizController extends Controller
         $testo = array();
         $testo['titolo'] = $impostazioni->where('nome', 'Titolo sito')->first();
         $testo['sottotitolo'] = $impostazioni->where('nome', 'Descrizione sito')->first();
+		$testo['stato'] = $impostazioni->where('nome', 'Stato')->first();
 
         $profilazione = array();
 
