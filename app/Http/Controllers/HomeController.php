@@ -157,4 +157,42 @@ class HomeController extends Controller
         return redirect()->route('home');
     }
 
+    public function risultati(Request $request)
+
+    {
+
+
+
+        $risposte=Risposta::all();
+        $tempuser = 1;
+        $tempsomma = 0;
+
+        $risultati=array();
+        $risultati[0]=0;
+        $risultati[1]=0;
+        $risultati[2]=0;
+
+        foreach ($risposte as $r) {
+            if($r->domande()->table_id == 8 ) {
+                if($r->utente != $tempuser ) {
+                    if($tempsomma > 40 ) {
+                        $risultati[2] = $risultati[2]+1;
+                    } else if ($tempsomma > 35 ){
+                        $risultati[1] = $risultati[1]+1;
+                    } else {
+                        $risultati[0] = $risultati[0]+1;
+                    }
+                } else {
+                    $tempsomma = $tempsomma + (int)$r->risposta;
+                }
+            }
+        }
+
+        dd($risultati);
+
+        return view('risultati')->with([
+            'risultati' => $risultati
+        ]);
+    }
+
 }
