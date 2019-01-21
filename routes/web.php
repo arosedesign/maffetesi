@@ -20,6 +20,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/home/edit-user', 'HomeController@editUser')->name('editUser');
 Route::post('/home/edit-tabella', 'HomeController@editTabella')->name('editTabella');
 Route::post('/home/delete', 'HomeController@delete')->name('delete');
-Route::post('/risultati', 'HomeController@risultati')->name('risultati');
+Route::get('/risultati', 'HomeController@risultati')->name('risultati');
+Route::post('/risultati-filtrati', 'HomeController@risultatiFiltrati')->name('risultati-filtrati');
 
 

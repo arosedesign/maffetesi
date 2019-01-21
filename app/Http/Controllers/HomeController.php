@@ -6,6 +6,7 @@ use App\Domande;
 use App\Impostazioni;
 use App\Options;
 use App\Table;
+use App\Risposta;
 use Illuminate\Http\Request;
 use App\User;
 
@@ -170,37 +171,206 @@ class HomeController extends Controller
 
     {
 
+        $filtri = Options::where('table_id', 7)
+            ->where('tipo', 'select')
+            ->get();
 
+        $filter=array();
 
-        $risposte=Risposta::all();
-        $tempuser = 1;
-        $tempsomma = 0;
-
-        $risultati=array();
-        $risultati[0]=0;
-        $risultati[1]=0;
-        $risultati[2]=0;
-
-        foreach ($risposte as $r) {
-            if($r->domande()->table_id == 8 ) {
-                if($r->utente != $tempuser ) {
-                    if($tempsomma > 40 ) {
-                        $risultati[2] = $risultati[2]+1;
-                    } else if ($tempsomma > 35 ){
-                        $risultati[1] = $risultati[1]+1;
-                    } else {
-                        $risultati[0] = $risultati[0]+1;
-                    }
-                } else {
-                    $tempsomma = $tempsomma + (int)$r->risposta;
-                }
-            }
+        foreach ($filtri as $f) {
+            $filter[$f->id]['nome'] = $f->nome;
+            $filter[$f->id]['id'] = $f->id;
+            $filter[$f->id]['valore'] = array_combine(explode("_",$f->valore), explode("_",$f->valore));
         }
 
-        dd($risultati);
+        var_dump($filter);
+
+
+        $gruppo1query = Domande::where('table_id', 8)->pluck('id')->toArray();
+        $risposte1 = Risposta::whereIn('id_domanda', $gruppo1query)->get();
+        $tempuser1 = 1;
+        $tempsomma1 = 0;
+        $risultati1=array();
+        $risultati1[0]=0;
+        $risultati1[1]=0;
+        $risultati1[2]=0;
+        foreach ($risposte1 as $r1) {
+            if((int)$r1->utente != $tempuser1 ) {
+                if($tempsomma1 > 40 ) {
+                    $risultati1[2] = $risultati1[2]+1;
+                } else if ($tempsomma1 > 35 ){
+                    $risultati1[1] = $risultati1[1]+1;
+                } else {
+                    $risultati1[0] = $risultati1[0]+1;
+                }
+                $tempuser1 = $r1->utente;
+                $tempsomma1 = 0;
+            } else {
+                if((int)$r1->utente == 1034 && (int)$r1->id_domanda == 23) {
+                    $tempsomma1 = $tempsomma1 + (int)$r1->risposta;
+                    if($tempsomma1 > 40 ) {
+                        $risultati1[2] = $risultati1[2]+1;
+                    } else if ($tempsomma1 > 35 ){
+                        $risultati1[1] = $risultati1[1]+1;
+                    } else {
+                        $risultati1[0] = $risultati1[0]+1;
+                    }
+                    $tempuser1 = $r1->utente;
+                    $tempsomma1 = 0;
+                } else {
+                    $tempsomma1 = $tempsomma1 + (int)$r1->risposta;
+                }
+            }
+
+        }
+        $risultati1['totale'] = $risultati1[0]+$risultati1[1]+$risultati1[2];
+
+        $gruppo2query = Domande::where('table_id', 9)->pluck('id')->toArray();
+        $risposte2 = Risposta::whereIn('id_domanda', $gruppo2query)->get();
+        $tempuser2 = 1;
+        $tempsomma2 = 0;
+        $risultati2=array();
+        $risultati2[0]=0;
+        $risultati2[1]=0;
+        $risultati2[2]=0;
+        foreach ($risposte2 as $r2) {
+            if((int)$r2->utente != $tempuser2 ) {
+                if($tempsomma2 > 48 ) {
+                    $risultati2[2] = $risultati2[2]+1;
+                } else if ($tempsomma2 > 30 ){
+                    $risultati2[1] = $risultati2[1]+1;
+                } else {
+                    $risultati2[0] = $risultati2[0]+1;
+                }
+                $tempuser2 = $r2->utente;
+                $tempsomma2 = 0;
+            } else {
+                if((int)$r2->utente == 1034 && (int)$r2->id_domanda == 23) {
+                    $tempsomma2 = $tempsomma2 + (int)$r2->risposta;
+                    if($tempsomma2 > 48 ) {
+                        $risultati2[2] = $risultati2[2]+1;
+                    } else if ($tempsomma2 > 30 ){
+                        $risultati2[1] = $risultati2[1]+1;
+                    } else {
+                        $risultati2[0] = $risultati2[0]+1;
+                    }
+                    $tempuser2 = $r2->utente;
+                    $tempsomma2 = 0;
+                } else {
+                    $tempsomma2 = $tempsomma2 + (int)$r2->risposta;
+                }
+            }
+
+        }
+        $risultati2['totale'] = $risultati2[0]+$risultati2[1]+$risultati2[2];
 
         return view('risultati')->with([
-            'risultati' => $risultati
+            'risultati1' => $risultati1,
+            'risultati2' => $risultati2,
+            'filters' => $filter
+        ]);
+    }
+
+    public function risultatiFiltrati(Request $request)
+    {
+
+        $filtri = Options::where('table_id', 7)
+            ->where('tipo', 'select')
+            ->get();
+
+        $filter=array();
+
+        foreach ($filtri as $f) {
+            $filter[$f->id]['nome'] = $f->nome;
+            $filter[$f->id]['id'] = $f->id;
+            $filter[$f->id]['valore'] = array_combine(explode("_",$f->valore), explode("_",$f->valore));
+        }
+
+        var_dump($filter);
+
+
+        $gruppo1query = Domande::where('table_id', 8)->pluck('id')->toArray();
+        $risposte1 = Risposta::whereIn('id_domanda', $gruppo1query)->get();
+        $tempuser1 = 1;
+        $tempsomma1 = 0;
+        $risultati1=array();
+        $risultati1[0]=0;
+        $risultati1[1]=0;
+        $risultati1[2]=0;
+        foreach ($risposte1 as $r1) {
+            if((int)$r1->utente != $tempuser1 ) {
+                if($tempsomma1 > 40 ) {
+                    $risultati1[2] = $risultati1[2]+1;
+                } else if ($tempsomma1 > 35 ){
+                    $risultati1[1] = $risultati1[1]+1;
+                } else {
+                    $risultati1[0] = $risultati1[0]+1;
+                }
+                $tempuser1 = $r1->utente;
+                $tempsomma1 = 0;
+            } else {
+                if((int)$r1->utente == 1034 && (int)$r1->id_domanda == 23) {
+                    $tempsomma1 = $tempsomma1 + (int)$r1->risposta;
+                    if($tempsomma1 > 40 ) {
+                        $risultati1[2] = $risultati1[2]+1;
+                    } else if ($tempsomma1 > 35 ){
+                        $risultati1[1] = $risultati1[1]+1;
+                    } else {
+                        $risultati1[0] = $risultati1[0]+1;
+                    }
+                    $tempuser1 = $r1->utente;
+                    $tempsomma1 = 0;
+                } else {
+                    $tempsomma1 = $tempsomma1 + (int)$r1->risposta;
+                }
+            }
+
+        }
+        $risultati1['totale'] = $risultati1[0]+$risultati1[1]+$risultati1[2];
+
+        $gruppo2query = Domande::where('table_id', 9)->pluck('id')->toArray();
+        $risposte2 = Risposta::whereIn('id_domanda', $gruppo2query)->get();
+        $tempuser2 = 1;
+        $tempsomma2 = 0;
+        $risultati2=array();
+        $risultati2[0]=0;
+        $risultati2[1]=0;
+        $risultati2[2]=0;
+        foreach ($risposte2 as $r2) {
+            if((int)$r2->utente != $tempuser2 ) {
+                if($tempsomma2 > 48 ) {
+                    $risultati2[2] = $risultati2[2]+1;
+                } else if ($tempsomma2 > 30 ){
+                    $risultati2[1] = $risultati2[1]+1;
+                } else {
+                    $risultati2[0] = $risultati2[0]+1;
+                }
+                $tempuser2 = $r2->utente;
+                $tempsomma2 = 0;
+            } else {
+                if((int)$r2->utente == 1034 && (int)$r2->id_domanda == 23) {
+                    $tempsomma2 = $tempsomma2 + (int)$r2->risposta;
+                    if($tempsomma2 > 48 ) {
+                        $risultati2[2] = $risultati2[2]+1;
+                    } else if ($tempsomma2 > 30 ){
+                        $risultati2[1] = $risultati2[1]+1;
+                    } else {
+                        $risultati2[0] = $risultati2[0]+1;
+                    }
+                    $tempuser2 = $r2->utente;
+                    $tempsomma2 = 0;
+                } else {
+                    $tempsomma2 = $tempsomma2 + (int)$r2->risposta;
+                }
+            }
+
+        }
+        $risultati2['totale'] = $risultati2[0]+$risultati2[1]+$risultati2[2];
+
+        return view('risultati')->with([
+            'risultati1' => $risultati1,
+            'risultati2' => $risultati2,
+            'filters' => $filter
         ]);
     }
 
