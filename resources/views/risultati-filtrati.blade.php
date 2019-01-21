@@ -8,6 +8,12 @@
 
             {{ Form::open(array('route' => 'risultati-filtrati')) }}
 
+            <div class="form-group">
+                <div class="col-sm-12">
+                    {{ Form::select( 'bmi', array('18.5-25' =>'18.5-25','25.1-30' => '25.1-30','> 30.1' =>'> 30.1'))  }}
+                </div>
+            </div>
+
             @foreach ($filters as $f)
 
                 @if ($f['nome'] != 'Che tipo di sport pratichi?')

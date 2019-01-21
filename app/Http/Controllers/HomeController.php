@@ -183,18 +183,19 @@ class HomeController extends Controller
             $filter[$f->id]['valore'] = array_combine(explode("_",$f->valore), explode("_",$f->valore));
         }
 
-        var_dump($filter);
-
 
         $gruppo1query = Domande::where('table_id', 8)->pluck('id')->toArray();
         $risposte1 = Risposta::whereIn('id_domanda', $gruppo1query)->get();
-        $tempuser1 = 1;
+        $tempuser1 = 0;
         $tempsomma1 = 0;
         $risultati1=array();
         $risultati1[0]=0;
         $risultati1[1]=0;
         $risultati1[2]=0;
         foreach ($risposte1 as $r1) {
+            if ($tempuser1 == 0) {
+                $tempuser1 == (int)$r1->utente;
+            }
             if((int)$r1->utente != $tempuser1 ) {
                 if($tempsomma1 > 40 ) {
                     $risultati1[2] = $risultati1[2]+1;
@@ -227,13 +228,16 @@ class HomeController extends Controller
 
         $gruppo2query = Domande::where('table_id', 9)->pluck('id')->toArray();
         $risposte2 = Risposta::whereIn('id_domanda', $gruppo2query)->get();
-        $tempuser2 = 1;
+        $tempuser2 = 0;
         $tempsomma2 = 0;
         $risultati2=array();
         $risultati2[0]=0;
         $risultati2[1]=0;
         $risultati2[2]=0;
         foreach ($risposte2 as $r2) {
+            if ($tempuser2 == 0) {
+                $tempuser2 == (int)$r2->utente;
+            }
             if((int)$r2->utente != $tempuser2 ) {
                 if($tempsomma2 > 48 ) {
                     $risultati2[2] = $risultati2[2]+1;
@@ -274,43 +278,107 @@ class HomeController extends Controller
     public function risultatiFiltrati(Request $request)
     {
 
+
         $filtri = Options::where('table_id', 7)
             ->where('tipo', 'select')
             ->get();
 
         $filter=array();
+        $filterid=array();
 
         foreach ($filtri as $f) {
+            $filterid[]=$f->id;
             $filter[$f->id]['nome'] = $f->nome;
             $filter[$f->id]['id'] = $f->id;
             $filter[$f->id]['valore'] = array_combine(explode("_",$f->valore), explode("_",$f->valore));
         }
 
-        var_dump($filter);
+        $utentifiltrati =array();
+
+
+        if (!empty($request->input(7))) {
+            $filtrautenti = Risposta::where('id_opzione', 7)
+                ->where('risposta', $request->input(7))
+                ->get();
+
+            foreach ($filtrautenti as $users) {
+                $utentifiltrati[]=$users->utente;
+                $utentifiltrati = array_unique( $utentifiltrati);
+            }
+
+        }
+
+        if (!empty($request->input(10))) {
+            $utentifiltrati2 =array();
+            $filtrautenti2 = Risposta::where('id_opzione', 10)
+                ->where('risposta', $request->input(10))
+                ->get();
+
+            foreach ($filtrautenti2 as $users2) {
+                $utentifiltrati2[]=$users2->utente;
+                $utentifiltrati2 = array_unique( $utentifiltrati2);
+            }
+
+            if( !empty($request->input(7)) ) {
+                $utentifiltrati = array_intersect($utentifiltrati,$utentifiltrati2);
+            }else {
+                $utentifiltrati = $utentifiltrati2;
+            }
+
+
+        }
+
+        if (!empty($request->input(22))) {
+            $utentifiltrati3 =array();
+            $filtrautenti3 = Risposta::where('id_opzione', 22)
+                ->where('risposta', $request->input(22))
+                ->get();
+
+            foreach ($filtrautenti3 as $users3) {
+                $utentifiltrati3[]=$users3->utente;
+                $utentifiltrati3 = array_unique( $utentifiltrati3);
+            }
+
+            if( !empty($request->input(7)) || !empty($request->input(10)) ) {
+                $utentifiltrati = array_intersect($utentifiltrati, $utentifiltrati3);
+            }else {
+                $utentifiltrati = $utentifiltrati3;
+            }
+        }
+
+        if (!empty($request->input(23))) {
+            $utentifiltrati4 =array();
+            $filtrautenti4 = Risposta::where('id_opzione', 23)
+                ->whereIn('risposta', $request->input(23))
+                ->get();
+
+            foreach ($filtrautenti4 as $users4) {
+                $utentifiltrati4[]=$users4->utente;
+                $utentifiltrati4 = array_unique( $utentifiltrati4);
+            }
+
+            if( !empty($request->input(7)) || !empty($request->input(10)) || !empty($request->input(22)) ) {
+                $utentifiltrati = array_intersect($utentifiltrati, $utentifiltrati4);
+            } else {
+                $utentifiltrati = $utentifiltrati4;
+            }
+        }
 
 
         $gruppo1query = Domande::where('table_id', 8)->pluck('id')->toArray();
         $risposte1 = Risposta::whereIn('id_domanda', $gruppo1query)->get();
-        $tempuser1 = 1;
+        $tempuser1 = 0;
         $tempsomma1 = 0;
         $risultati1=array();
         $risultati1[0]=0;
         $risultati1[1]=0;
         $risultati1[2]=0;
         foreach ($risposte1 as $r1) {
-            if((int)$r1->utente != $tempuser1 ) {
-                if($tempsomma1 > 40 ) {
-                    $risultati1[2] = $risultati1[2]+1;
-                } else if ($tempsomma1 > 35 ){
-                    $risultati1[1] = $risultati1[1]+1;
-                } else {
-                    $risultati1[0] = $risultati1[0]+1;
+            if (in_array((int)$r1->utente, $utentifiltrati)) {
+                if ($tempuser1 == 0) {
+                    $tempuser1 == (int)$r1->utente;
                 }
-                $tempuser1 = $r1->utente;
-                $tempsomma1 = 0;
-            } else {
-                if((int)$r1->utente == 1034 && (int)$r1->id_domanda == 23) {
-                    $tempsomma1 = $tempsomma1 + (int)$r1->risposta;
+                if((int)$r1->utente != $tempuser1 ) {
                     if($tempsomma1 > 40 ) {
                         $risultati1[2] = $risultati1[2]+1;
                     } else if ($tempsomma1 > 35 ){
@@ -321,8 +389,21 @@ class HomeController extends Controller
                     $tempuser1 = $r1->utente;
                     $tempsomma1 = 0;
                 } else {
-                    $tempsomma1 = $tempsomma1 + (int)$r1->risposta;
-                }
+                    if((int)$r1->utente == 1034 && (int)$r1->id_domanda == 23) {
+                        $tempsomma1 = $tempsomma1 + (int)$r1->risposta;
+                        if($tempsomma1 > 40 ) {
+                            $risultati1[2] = $risultati1[2]+1;
+                        } else if ($tempsomma1 > 35 ){
+                            $risultati1[1] = $risultati1[1]+1;
+                        } else {
+                            $risultati1[0] = $risultati1[0]+1;
+                        }
+                        $tempuser1 = $r1->utente;
+                        $tempsomma1 = 0;
+                    } else {
+                        $tempsomma1 = $tempsomma1 + (int)$r1->risposta;
+                    }
+                 }
             }
 
         }
@@ -330,13 +411,16 @@ class HomeController extends Controller
 
         $gruppo2query = Domande::where('table_id', 9)->pluck('id')->toArray();
         $risposte2 = Risposta::whereIn('id_domanda', $gruppo2query)->get();
-        $tempuser2 = 1;
+        $tempuser2 = 0;
         $tempsomma2 = 0;
         $risultati2=array();
         $risultati2[0]=0;
         $risultati2[1]=0;
         $risultati2[2]=0;
         foreach ($risposte2 as $r2) {
+            if ($tempuser2 == 0) {
+                $tempuser2 == (int)$r2->utente;
+            }
             if((int)$r2->utente != $tempuser2 ) {
                 if($tempsomma2 > 48 ) {
                     $risultati2[2] = $risultati2[2]+1;

@@ -23,7 +23,7 @@
                             <h4>Sport</h4>
 
                             @foreach ($f['valore'] as $c)
-                                {{ Form::checkbox( $f['id'], $c)  }}
+                                {{ Form::checkbox( $f['id'].'[]', $c)  }}
                                 {{ Form::label( $f['id'], $c, '', array('class' => 'form-control'))  }} <br>
 
                             @endforeach
