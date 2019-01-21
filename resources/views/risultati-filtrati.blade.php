@@ -10,7 +10,7 @@
 
             <div class="form-group">
                 <div class="col-sm-12">
-                    {{ Form::select( 'bmi', array('18.5-25' =>'18.5-25','25.1-30' => '25.1-30','> 30.1' =>'> 30.1'))  }}
+                    {{ Form::select( 'bmi', array('0' =>'18.5-25','1' => '25.1-30','2' =>'> 30.1'), 'BMI', array('class' => 'form-control', 'placeholder' => 'BMI'))  }}
                 </div>
             </div>
 

@@ -278,8 +278,18 @@ class HomeController extends Controller
     public function risultatiFiltrati(Request $request)
     {
 
+		if( empty($request->input(7)) &&
+			empty($request->input(10)) &&
+			empty($request->input(22)) &&
+			empty($request->input(23)) &&
+			empty($request->input('bmi'))
+		) {
+			return redirect()->route('risultati');
+		}
 
-        $filtri = Options::where('table_id', 7)
+
+
+			$filtri = Options::where('table_id', 7)
             ->where('tipo', 'select')
             ->get();
 
@@ -357,13 +367,54 @@ class HomeController extends Controller
                 $utentifiltrati4 = array_unique( $utentifiltrati4);
             }
 
-            if( !empty($request->input(7)) || !empty($request->input(10)) || !empty($request->input(22)) ) {
+            if( !empty($request->input(7)) || !empty($request->input(10)) || !empty($request->input(22))  ) {
                 $utentifiltrati = array_intersect($utentifiltrati, $utentifiltrati4);
             } else {
                 $utentifiltrati = $utentifiltrati4;
             }
+
         }
 
+		if (!empty($request->input('bmi'))) {
+			$utentifiltrati5 =array();
+
+			$elencouser = Risposta::select('utente')
+				->groupBy('utente')
+				->get();
+
+			$filtrautenti5=array();
+
+			foreach ($elencouser as $ele) {
+
+				$altezza = Risposta::select('risposta')
+					->where('id_opzione', 8)
+					->where('utente', $ele->utente)
+					->first();
+
+				$peso = Risposta::select('risposta')
+					->where('id_opzione', 9)
+					->where('utente', $ele->utente)
+					->first();
+
+				$bmi = (float)$peso->risposta / ( (float)$altezza->risposta * (float)$altezza->risposta );
+
+				if ( $request->input('bmi') == '0' && $bmi >= 18.5 && $bmi <= 25 ) {
+					$filtrautenti5[]=$ele->utente;
+				} else if ( $request->input('bmi') == '1' && $bmi > 25 && $bmi <= 30 ) {
+					$filtrautenti5[]=$ele->utente;
+				}  else if ( $request->input('bmi') == '2' && $bmi > 30 ) {
+					$filtrautenti5[]=$ele->utente;
+				}
+
+			}
+
+			if( !empty($request->input(7)) || !empty($request->input(10)) || !empty($request->input(22)) || !empty($request->input(23))  ) {
+				$utentifiltrati = array_intersect($utentifiltrati, $filtrautenti5);
+			} else {
+				$utentifiltrati = $filtrautenti5;
+			}
+
+		}
 
         $gruppo1query = Domande::where('table_id', 8)->pluck('id')->toArray();
         $risposte1 = Risposta::whereIn('id_domanda', $gruppo1query)->get();
@@ -418,35 +469,38 @@ class HomeController extends Controller
         $risultati2[1]=0;
         $risultati2[2]=0;
         foreach ($risposte2 as $r2) {
-            if ($tempuser2 == 0) {
-                $tempuser2 == (int)$r2->utente;
-            }
-            if((int)$r2->utente != $tempuser2 ) {
-                if($tempsomma2 > 48 ) {
-                    $risultati2[2] = $risultati2[2]+1;
-                } else if ($tempsomma2 > 30 ){
-                    $risultati2[1] = $risultati2[1]+1;
-                } else {
-                    $risultati2[0] = $risultati2[0]+1;
-                }
-                $tempuser2 = $r2->utente;
-                $tempsomma2 = 0;
-            } else {
-                if((int)$r2->utente == 1034 && (int)$r2->id_domanda == 23) {
-                    $tempsomma2 = $tempsomma2 + (int)$r2->risposta;
-                    if($tempsomma2 > 48 ) {
-                        $risultati2[2] = $risultati2[2]+1;
-                    } else if ($tempsomma2 > 30 ){
-                        $risultati2[1] = $risultati2[1]+1;
-                    } else {
-                        $risultati2[0] = $risultati2[0]+1;
-                    }
-                    $tempuser2 = $r2->utente;
-                    $tempsomma2 = 0;
-                } else {
-                    $tempsomma2 = $tempsomma2 + (int)$r2->risposta;
-                }
-            }
+			if (in_array((int)$r2->utente, $utentifiltrati)) {
+
+				if ($tempuser2 == 0) {
+					$tempuser2 == (int)$r2->utente;
+				}
+				if ((int)$r2->utente != $tempuser2) {
+					if ($tempsomma2 > 48) {
+						$risultati2[2] = $risultati2[2] + 1;
+					} else if ($tempsomma2 > 30) {
+						$risultati2[1] = $risultati2[1] + 1;
+					} else {
+						$risultati2[0] = $risultati2[0] + 1;
+					}
+					$tempuser2 = $r2->utente;
+					$tempsomma2 = 0;
+				} else {
+					if ((int)$r2->utente == 1034 && (int)$r2->id_domanda == 23) {
+						$tempsomma2 = $tempsomma2 + (int)$r2->risposta;
+						if ($tempsomma2 > 48) {
+							$risultati2[2] = $risultati2[2] + 1;
+						} else if ($tempsomma2 > 30) {
+							$risultati2[1] = $risultati2[1] + 1;
+						} else {
+							$risultati2[0] = $risultati2[0] + 1;
+						}
+						$tempuser2 = $r2->utente;
+						$tempsomma2 = 0;
+					} else {
+						$tempsomma2 = $tempsomma2 + (int)$r2->risposta;
+					}
+				}
+			}
 
         }
         $risultati2['totale'] = $risultati2[0]+$risultati2[1]+$risultati2[2];
