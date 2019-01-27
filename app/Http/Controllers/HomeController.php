@@ -268,9 +268,703 @@ class HomeController extends Controller
         }
         $risultati2['totale'] = $risultati2[0]+$risultati2[1]+$risultati2[2];
 
+
+
+        $gruppo3query = Domande::where('table_id', 8)->pluck('id')->toArray();
+        $risposte3 = Risposta::whereIn('id_domanda', $gruppo3query)->get();
+        $tempuser3 = 0;
+        $tempsomma3 = 0;
+        $risultati3=array();
+        $risultati3[0]=0;
+        $risultati3[1]=0;
+        $risultati3[2]=0;
+        $sportfiltrati = array('Bodybuilding');
+
+
+        $utentifiltrati =array();
+        $filtrautenti = Risposta::where('id_opzione', 23)
+            ->whereIn('risposta', $sportfiltrati)
+            ->get();
+
+
+        foreach ($filtrautenti as $users) {
+            $utentifiltrati[]=$users->utente;
+            $utentifiltrati = array_unique( $utentifiltrati);
+        }
+
+        foreach ($risposte3 as $r3) {
+            if (in_array((int)$r3->utente, $utentifiltrati)) {
+                if ($tempuser3 == 0) {
+                    $tempuser3 == (int)$r3->utente;
+                }
+                if ((int)$r3->utente != $tempuser3) {
+                    if (($tempsomma3 > 29) && ($tempsomma3 < 36)) {
+                        $risultati3[2] = $risultati3[2] + 1;
+                    } else if ($tempsomma3 > 22) {
+                        $risultati3[1] = $risultati3[1] + 1;
+
+                    } else if ($tempsomma3 > 14) {
+                        $risultati3[0] = $risultati3[0] + 1;
+
+                    }
+                    $tempuser3 = $r3->utente;
+                    $tempsomma3 = 0;
+
+                } else {
+                    if ((int)$r3->utente == 1034 && (int)$r3->id_domanda == 23) {
+                        $tempsomma3 = $tempsomma3 + (int)$r3->risposta;
+                        if (($tempsomma3 > 29) && ($tempsomma3 < 36)) {
+                            $risultati3[2] = $risultati3[2] + 1;
+                        } else if ($tempsomma3 > 22) {
+                            $risultati3[1] = $risultati3[1] + 1;
+
+                        } else if ($tempsomma3 > 14) {
+                            $risultati3[0] = $risultati3[0] + 1;
+                        }
+                        $tempuser3 = $r3->utente;
+                        $tempsomma3 = 0;
+                    } else {
+                        $tempsomma3 = $tempsomma3 + (int)$r3->risposta;
+                    }
+                }
+            }
+
+        }
+        $risultati3['totale'] = $risultati3[0]+$risultati3[1]+$risultati3[2];
+
+        $bodybuilding1 = array();
+        $bodybuilding1[0]=$risultati3[0];
+        $bodybuilding1[1]=$risultati3[1];
+        $bodybuilding1[2]=$risultati3[2];
+
+        $divisore1 = $risultati3['totale'];
+
+
+        $tempuser3 = 0;
+        $tempsomma3 = 0;
+        $risultati3=array();
+        $risultati3[0]=0;
+        $risultati3[1]=0;
+        $risultati3[2]=0;
+        $sportfiltrati = array('Corsi (zumba, step ecc...)','Sport di squadra_Endurance (corsa, ciclismo ecc...)','Sport in singolo (tennis, lotta ecc...)');
+
+        $utentifiltrati =array();
+        $filtrautenti = Risposta::where('id_opzione', 23)
+            ->whereIn('risposta', $sportfiltrati)
+            ->get();
+
+
+        foreach ($filtrautenti as $users) {
+            $utentifiltrati[]=$users->utente;
+            $utentifiltrati = array_unique( $utentifiltrati);
+        }
+
+        foreach ($risposte3 as $r3) {
+            if (in_array((int)$r3->utente, $utentifiltrati)) {
+                if ($tempuser3 == 0) {
+                    $tempuser3 == (int)$r3->utente;
+                }
+                if ((int)$r3->utente != $tempuser3) {
+                    if (($tempsomma3 > 29) && ($tempsomma3 < 36)) {
+                        $risultati3[2] = $risultati3[2] + 1;
+                    } else if ($tempsomma3 > 22) {
+                        $risultati3[1] = $risultati3[1] + 1;
+
+                    } else if ($tempsomma3 > 14) {
+                        $risultati3[0] = $risultati3[0] + 1;
+
+                    }
+                    $tempuser3 = $r3->utente;
+                    $tempsomma3 = 0;
+
+                } else {
+                    if ((int)$r3->utente == 1034 && (int)$r3->id_domanda == 23) {
+                        $tempsomma3 = $tempsomma3 + (int)$r3->risposta;
+                        if (($tempsomma3 > 29) && ($tempsomma3 < 36)) {
+                            $risultati3[2] = $risultati3[2] + 1;
+                        } else if ($tempsomma3 > 22) {
+                            $risultati3[1] = $risultati3[1] + 1;
+
+                        } else if ($tempsomma3 > 14) {
+                            $risultati3[0] = $risultati3[0] + 1;
+                        }
+                        $tempuser3 = $r3->utente;
+                        $tempsomma3 = 0;
+                    } else {
+                        $tempsomma3 = $tempsomma3 + (int)$r3->risposta;
+                    }
+                }
+            }
+
+        }
+        $risultati3['totale'] = $risultati3[0]+$risultati3[1]+$risultati3[2];
+
+        $corsi1 = array();
+        $corsi1[0]=$risultati3[0];
+        $corsi1[1]=$risultati3[1];
+        $corsi1[2]=$risultati3[2];
+
+        $divisore1 = $divisore1 + $risultati3['totale'];
+
+        $tempuser3 = 0;
+        $tempsomma3 = 0;
+        $risultati3=array();
+        $risultati3[0]=0;
+        $risultati3[1]=0;
+        $risultati3[2]=0;
+        $sportfiltrati = array('Pesistica prestativa (PL, WL ecc…)');
+
+        $utentifiltrati =array();
+        $filtrautenti = Risposta::where('id_opzione', 23)
+            ->whereIn('risposta', $sportfiltrati)
+            ->get();
+
+
+        foreach ($filtrautenti as $users) {
+            $utentifiltrati[]=$users->utente;
+            $utentifiltrati = array_unique( $utentifiltrati);
+        }
+
+        foreach ($risposte3 as $r3) {
+            if (in_array((int)$r3->utente, $utentifiltrati)) {
+                if ($tempuser3 == 0) {
+                    $tempuser3 == (int)$r3->utente;
+                }
+                if ((int)$r3->utente != $tempuser3) {
+                    if (($tempsomma3 > 29) && ($tempsomma3 < 36)) {
+                        $risultati3[2] = $risultati3[2] + 1;
+                    } else if ($tempsomma3 > 22) {
+                        $risultati3[1] = $risultati3[1] + 1;
+
+                    } else if ($tempsomma3 > 14) {
+                        $risultati3[0] = $risultati3[0] + 1;
+                    }
+                    $tempuser3 = $r3->utente;
+                    $tempsomma3 = 0;
+
+                } else {
+                    if ((int)$r3->utente == 1034 && (int)$r3->id_domanda == 23) {
+                        $tempsomma3 = $tempsomma3 + (int)$r3->risposta;
+                        if (($tempsomma3 > 29) && ($tempsomma3 < 36)) {
+                            $risultati3[2] = $risultati3[2] + 1;
+                        } else if ($tempsomma3 > 22) {
+                            $risultati3[1] = $risultati3[1] + 1;
+
+                        } else if ($tempsomma3 > 14) {
+                            $risultati3[0] = $risultati3[0] + 1;
+                        }
+                        $tempuser3 = $r3->utente;
+                        $tempsomma3 = 0;
+                    } else {
+                        $tempsomma3 = $tempsomma3 + (int)$r3->risposta;
+                    }
+                }
+            }
+
+        }
+        $risultati3['totale'] = $risultati3[0]+$risultati3[1]+$risultati3[2];
+
+        $pesistica1 = array();
+        $pesistica1[0]=$risultati3[0];
+        $pesistica1[1]=$risultati3[1];
+        $pesistica1[2]=$risultati3[2];
+
+        $divisore1 = $divisore1 + $risultati3['totale'];
+
+
+        $gruppo4query = Domande::where('table_id', 9)->pluck('id')->toArray();
+        $risposte4 = Risposta::whereIn('id_domanda', $gruppo4query)->get();
+        $tempuser4 = 0;
+        $tempsomma4 = 0;
+        $risultati4=array();
+        $risultati4[0]=0;
+        $risultati4[1]=0;
+        $risultati4[2]=0;
+        $sportfiltrati = array('Bodybuilding');
+
+
+        $utentifiltrati0 =array();
+        $filtrautenti0 = Risposta::where('id_opzione', 23)
+            ->whereIn('risposta', $sportfiltrati)
+            ->get();
+
+        foreach ($filtrautenti0 as $users0) {
+            $utentifiltrati0[]=$users0->utente;
+            $utentifiltrati0 = array_unique( $utentifiltrati0);
+        }
+
+        $utentifiltrati1 =array();
+        $filtrautenti1 = Risposta::where('id_opzione', 7)
+            ->where('risposta', 'M')
+            ->get();
+
+
+
+        foreach ($filtrautenti1 as $users1) {
+            $utentifiltrati1[]=$users1->utente;
+            $utentifiltrati1 = array_unique( $utentifiltrati1);
+        }
+
+        $utentifiltrati = array_intersect($utentifiltrati0, $utentifiltrati1);
+
+        foreach ($risposte4 as $r4) {
+            if (in_array((int)$r4->utente, $utentifiltrati)) {
+                if ($tempuser4 == 0) {
+                    $tempuser4 == (int)$r4->utente;
+                }
+                if ((int)$r4->utente != $tempuser4) {
+                    if (($tempsomma4 > 42) && ($tempsomma4 < 49)) {
+                        $risultati4[2] = $risultati4[2] + 1;
+                    } else if ($tempsomma4 > 37) {
+                        $risultati4[1] = $risultati4[1] + 1;
+
+                    } else if ($tempsomma4 > 30) {
+                        $risultati4[0] = $risultati4[0] + 1;
+                    }
+                    $tempuser4 = $r4->utente;
+                    $tempsomma4 = 0;
+
+                } else {
+                    if ((int)$r4->utente == 1034 && (int)$r4->id_domanda == 23) {
+                        $tempsomma4 = $tempsomma4 + (int)$r4->risposta;
+                        if (($tempsomma4 > 42) && ($tempsomma4 < 49)) {
+                            $risultati4[2] = $risultati4[2] + 1;
+                        } else if ($tempsomma4 > 37) {
+                            $risultati4[1] = $risultati4[1] + 1;
+
+                        } else if ($tempsomma4 > 30) {
+                            $risultati4[0] = $risultati4[0] + 1;
+                        }
+                        $tempuser4 = $r4->utente;
+                        $tempsomma4 = 0;
+                    } else {
+                        $tempsomma4 = $tempsomma4 + (int)$r4->risposta;
+                    }
+                }
+            }
+
+        }
+        $risultati4['totale'] = $risultati4[0]+$risultati4[1]+$risultati4[2];
+
+        $bodybuilding2 = array();
+        $bodybuilding2[0]=$risultati4[0];
+        $bodybuilding2[1]=$risultati4[1];
+        $bodybuilding2[2]=$risultati4[2];
+
+        $divisore2 = $risultati4['totale'];
+
+
+        $tempuser4 = 0;
+        $tempsomma4 = 0;
+        $risultati4=array();
+        $risultati4[0]=0;
+        $risultati4[1]=0;
+        $risultati4[2]=0;
+        $sportfiltrati = array('Corsi (zumba, step ecc...)','Sport di squadra_Endurance (corsa, ciclismo ecc...)','Sport in singolo (tennis, lotta ecc...)');
+
+        $utentifiltrati0 =array();
+        $filtrautenti0 = Risposta::where('id_opzione', 23)
+            ->whereIn('risposta', $sportfiltrati)
+            ->get();
+
+        foreach ($filtrautenti0 as $users0) {
+            $utentifiltrati0[]=$users0->utente;
+            $utentifiltrati0 = array_unique( $utentifiltrati0);
+        }
+
+        $utentifiltrati1 =array();
+        $filtrautenti1 = Risposta::where('id_opzione', 7)
+            ->where('risposta', 'M')
+            ->get();
+
+        foreach ($filtrautenti1 as $users1) {
+            $utentifiltrati1[]=$users1->utente;
+            $utentifiltrati1 = array_unique( $utentifiltrati1);
+        }
+
+        $utentifiltrati = array_intersect($utentifiltrati0, $utentifiltrati1);
+
+        foreach ($risposte4 as $r4) {
+            if (in_array((int)$r4->utente, $utentifiltrati)) {
+                if ($tempuser4 == 0) {
+                    $tempuser4 == (int)$r4->utente;
+                }
+                if ((int)$r4->utente != $tempuser4) {
+                    if (($tempsomma4 > 42) && ($tempsomma4 < 49)) {
+                        $risultati4[2] = $risultati4[2] + 1;
+                    } else if ($tempsomma4 > 37) {
+                        $risultati4[1] = $risultati4[1] + 1;
+
+                    } else if ($tempsomma4 > 30) {
+                        $risultati4[0] = $risultati4[0] + 1;
+                    }
+                    $tempuser4 = $r4->utente;
+                    $tempsomma4 = 0;
+
+                } else {
+                    if ((int)$r4->utente == 1034 && (int)$r4->id_domanda == 23) {
+                        $tempsomma4 = $tempsomma4 + (int)$r4->risposta;
+                        if (($tempsomma4 > 42) && ($tempsomma4 < 49)) {
+                            $risultati4[2] = $risultati4[2] + 1;
+                        } else if ($tempsomma4 > 37) {
+                            $risultati4[1] = $risultati4[1] + 1;
+
+                        } else if ($tempsomma4 > 30) {
+                            $risultati4[0] = $risultati4[0] + 1;
+                        }
+                        $tempuser4 = $r4->utente;
+                        $tempsomma4 = 0;
+                    } else {
+                        $tempsomma4 = $tempsomma4 + (int)$r4->risposta;
+                    }
+                }
+            }
+
+        }
+        $risultati4['totale'] = $risultati4[0]+$risultati4[1]+$risultati4[2];
+
+        $corsi2 = array();
+        $corsi2[0]=$risultati4[0];
+        $corsi2[1]=$risultati4[1];
+        $corsi2[2]=$risultati4[2];
+
+        $divisore2 = $divisore2 + $risultati4['totale'];
+
+        $tempuser4 = 0;
+        $tempsomma4 = 0;
+        $risultati4=array();
+        $risultati4[0]=0;
+        $risultati4[1]=0;
+        $risultati4[2]=0;
+        $sportfiltrati = array('Pesistica prestativa (PL, WL ecc…)');
+
+        $utentifiltrati0 =array();
+        $filtrautenti0 = Risposta::where('id_opzione', 23)
+            ->whereIn('risposta', $sportfiltrati)
+            ->get();
+
+        foreach ($filtrautenti0 as $users0) {
+            $utentifiltrati0[]=$users0->utente;
+            $utentifiltrati0 = array_unique( $utentifiltrati0);
+        }
+
+        $utentifiltrati1 =array();
+        $filtrautenti1 = Risposta::where('id_opzione', 7)
+            ->where('risposta', 'M')
+            ->get();
+
+        foreach ($filtrautenti1 as $users1) {
+            $utentifiltrati1[]=$users1->utente;
+            $utentifiltrati1 = array_unique( $utentifiltrati1);
+        }
+
+        $utentifiltrati = array_intersect($utentifiltrati0, $utentifiltrati1);
+
+        foreach ($risposte4 as $r4) {
+            if (in_array((int)$r4->utente, $utentifiltrati)) {
+                if ($tempuser4 == 0) {
+                    $tempuser4 == (int)$r4->utente;
+                }
+                if ((int)$r4->utente != $tempuser4) {
+                    if (($tempsomma4 > 42) && ($tempsomma4 < 49)) {
+                        $risultati4[2] = $risultati4[2] + 1;
+                    } else if ($tempsomma4 > 37) {
+                        $risultati4[1] = $risultati4[1] + 1;
+
+                    } else if ($tempsomma4 > 30) {
+                        $risultati4[0] = $risultati4[0] + 1;
+                    }
+                    $tempuser4 = $r4->utente;
+                    var_dump('4: '.$tempsomma4);
+                    $tempsomma4 = 0;
+
+                } else {
+                    if ((int)$r4->utente == 1034 && (int)$r4->id_domanda == 23) {
+                        $tempsomma4 = $tempsomma4 + (int)$r4->risposta;
+                        if (($tempsomma4 > 42) && ($tempsomma4 < 49)) {
+                            $risultati4[2] = $risultati4[2] + 1;
+                        } else if ($tempsomma4 > 37) {
+                            $risultati4[1] = $risultati4[1] + 1;
+
+                        } else if ($tempsomma4 > 30) {
+                            $risultati4[0] = $risultati4[0] + 1;
+                        }
+                        $tempuser4 = $r4->utente;
+                        var_dump('4: '.$tempsomma4);
+                        $tempsomma4 = 0;
+                    } else {
+                        $tempsomma4 = $tempsomma4 + (int)$r4->risposta;
+                    }
+                }
+            }
+
+        }
+        $risultati4['totale'] = $risultati4[0]+$risultati4[1]+$risultati4[2];
+
+        $pesistica2 = array();
+        $pesistica2[0]=$risultati4[0];
+        $pesistica2[1]=$risultati4[1];
+        $pesistica2[2]=$risultati4[2];
+
+        $divisore2 = $divisore2 + $risultati4['totale'];
+
+        $gruppo5query = Domande::where('table_id', 9)->pluck('id')->toArray();
+        $risposte5 = Risposta::whereIn('id_domanda', $gruppo5query)->get();
+        $tempuser5 = 0;
+        $tempsomma5 = 0;
+        $risultati5=array();
+        $risultati5[0]=0;
+        $risultati5[1]=0;
+        $risultati5[2]=0;
+        $sportfiltrati = array('Bodybuilding');
+
+
+        $utentifiltrati0 =array();
+        $filtrautenti0 = Risposta::where('id_opzione', 23)
+            ->whereIn('risposta', $sportfiltrati)
+            ->get();
+
+        foreach ($filtrautenti0 as $users0) {
+            $utentifiltrati0[]=$users0->utente;
+            $utentifiltrati0 = array_unique( $utentifiltrati0);
+        }
+
+        $utentifiltrati1 =array();
+        $filtrautenti1 = Risposta::where('id_opzione', 7)
+            ->where('risposta', 'F')
+            ->get();
+
+
+
+        foreach ($filtrautenti1 as $users1) {
+            $utentifiltrati1[]=$users1->utente;
+            $utentifiltrati1 = array_unique( $utentifiltrati1);
+        }
+
+        $utentifiltrati = array_intersect($utentifiltrati0, $utentifiltrati1);
+
+        foreach ($risposte5 as $r5) {
+            if (in_array((int)$r5->utente, $utentifiltrati)) {
+                if ($tempuser5 == 0) {
+                    $tempuser5 == (int)$r5->utente;
+                }
+                if ((int)$r5->utente != $tempuser5) {
+                    if (($tempsomma5 > 42) && ($tempsomma5 < 49)) {
+                        $risultati5[2] = $risultati5[2] + 1;
+                    } else if ($tempsomma5 > 37) {
+                        $risultati5[1] = $risultati5[1] + 1;
+
+                    } else if ($tempsomma5 > 30) {
+                        $risultati5[0] = $risultati5[0] + 1;
+                    }
+                    $tempuser5 = $r5->utente;
+                    $tempsomma5 = 0;
+
+                } else {
+                    if ((int)$r5->utente == 1034 && (int)$r5->id_domanda == 23) {
+                        $tempsomma5 = $tempsomma5 + (int)$r5->risposta;
+                        if (($tempsomma5 > 42) && ($tempsomma5 < 49)) {
+                            $risultati5[2] = $risultati5[2] + 1;
+                        } else if ($tempsomma5 > 37) {
+                            $risultati5[1] = $risultati5[1] + 1;
+
+                        } else if ($tempsomma5 > 30) {
+                            $risultati5[0] = $risultati5[0] + 1;
+                        }
+                        $tempuser5 = $r5->utente;
+                        $tempsomma5 = 0;
+                    } else {
+                        $tempsomma5 = $tempsomma5 + (int)$r5->risposta;
+                    }
+                }
+            }
+
+        }
+        $risultati5['totale'] = $risultati5[0]+$risultati5[1]+$risultati5[2];
+
+        $bodybuilding3 = array();
+        $bodybuilding3[0]=$risultati5[0];
+        $bodybuilding3[1]=$risultati5[1];
+        $bodybuilding3[2]=$risultati5[2];
+
+        $divisore3 = $risultati5['totale'];
+
+
+        $tempuser5 = 0;
+        $tempsomma5 = 0;
+        $risultati5=array();
+        $risultati5[0]=0;
+        $risultati5[1]=0;
+        $risultati5[2]=0;
+        $sportfiltrati = array('Corsi (zumba, step ecc...)','Sport di squadra_Endurance (corsa, ciclismo ecc...)','Sport in singolo (tennis, lotta ecc...)');
+
+        $utentifiltrati0 =array();
+        $filtrautenti0 = Risposta::where('id_opzione', 23)
+            ->whereIn('risposta', $sportfiltrati)
+            ->get();
+
+        foreach ($filtrautenti0 as $users0) {
+            $utentifiltrati0[]=$users0->utente;
+            $utentifiltrati0 = array_unique( $utentifiltrati0);
+        }
+
+        $utentifiltrati1 =array();
+        $filtrautenti1 = Risposta::where('id_opzione', 7)
+            ->where('risposta', 'M')
+            ->get();
+
+        foreach ($filtrautenti1 as $users1) {
+            $utentifiltrati1[]=$users1->utente;
+            $utentifiltrati1 = array_unique( $utentifiltrati1);
+        }
+
+        $utentifiltrati = array_intersect($utentifiltrati0, $utentifiltrati1);
+
+        foreach ($risposte5 as $r5) {
+            if (in_array((int)$r5->utente, $utentifiltrati)) {
+                if ($tempuser5 == 0) {
+                    $tempuser5 == (int)$r5->utente;
+                }
+                if ((int)$r5->utente != $tempuser5) {
+                    if (($tempsomma5 > 42) && ($tempsomma5 < 49)) {
+                        $risultati5[2] = $risultati5[2] + 1;
+                    } else if ($tempsomma5 > 37) {
+                        $risultati5[1] = $risultati5[1] + 1;
+
+                    } else if ($tempsomma5 > 30) {
+                        $risultati5[0] = $risultati5[0] + 1;
+                    }
+                    $tempuser5 = $r5->utente;
+                    $tempsomma5 = 0;
+
+                } else {
+                    if ((int)$r5->utente == 1034 && (int)$r5->id_domanda == 23) {
+                        $tempsomma5 = $tempsomma5 + (int)$r5->risposta;
+                        if (($tempsomma5 > 42) && ($tempsomma5 < 49)) {
+                            $risultati5[2] = $risultati5[2] + 1;
+                        } else if ($tempsomma5 > 37) {
+                            $risultati5[1] = $risultati5[1] + 1;
+
+                        } else if ($tempsomma5 > 30) {
+                            $risultati5[0] = $risultati5[0] + 1;
+                        }
+                        $tempuser5 = $r5->utente;
+                        $tempsomma5 = 0;
+                    } else {
+                        $tempsomma5 = $tempsomma5 + (int)$r5->risposta;
+                    }
+                }
+            }
+
+        }
+        $risultati5['totale'] = $risultati5[0]+$risultati5[1]+$risultati5[2];
+
+        $corsi3 = array();
+        $corsi3[0]=$risultati5[0];
+        $corsi3[1]=$risultati5[1];
+        $corsi3[2]=$risultati5[2];
+
+        $divisore3 = $divisore3 + $risultati5['totale'];
+
+        $tempuser5 = 0;
+        $tempsomma5 = 0;
+        $risultati5=array();
+        $risultati5[0]=0;
+        $risultati5[1]=0;
+        $risultati5[2]=0;
+        $sportfiltrati = array('Pesistica prestativa (PL, WL ecc…)');
+
+        $utentifiltrati0 =array();
+        $filtrautenti0 = Risposta::where('id_opzione', 23)
+            ->whereIn('risposta', $sportfiltrati)
+            ->get();
+
+        foreach ($filtrautenti0 as $users0) {
+            $utentifiltrati0[]=$users0->utente;
+            $utentifiltrati0 = array_unique( $utentifiltrati0);
+        }
+
+        $utentifiltrati1 =array();
+        $filtrautenti1 = Risposta::where('id_opzione', 7)
+            ->where('risposta', 'M')
+            ->get();
+
+        foreach ($filtrautenti1 as $users1) {
+            $utentifiltrati1[]=$users1->utente;
+            $utentifiltrati1 = array_unique( $utentifiltrati1);
+        }
+
+        $utentifiltrati = array_intersect($utentifiltrati0, $utentifiltrati1);
+
+        foreach ($risposte5 as $r5) {
+            if (in_array((int)$r5->utente, $utentifiltrati)) {
+                if ($tempuser5 == 0) {
+                    $tempuser5 == (int)$r5->utente;
+                }
+                if ((int)$r5->utente != $tempuser5) {
+                    if (($tempsomma5 > 42) && ($tempsomma5 < 49)) {
+                        $risultati5[2] = $risultati5[2] + 1;
+                    } else if ($tempsomma5 > 37) {
+                        $risultati5[1] = $risultati5[1] + 1;
+
+                    } else if ($tempsomma5 > 30) {
+                        $risultati5[0] = $risultati5[0] + 1;
+                    }
+                    $tempuser5 = $r5->utente;
+                    var_dump('5: '.$tempsomma5);
+
+                    $tempsomma5 = 0;
+
+
+                } else {
+                    if ((int)$r5->utente == 1034 && (int)$r5->id_domanda == 23) {
+                        $tempsomma5 = $tempsomma5 + (int)$r5->risposta;
+                        if (($tempsomma5 > 42) && ($tempsomma5 < 49)) {
+                            $risultati5[2] = $risultati5[2] + 1;
+                        } else if ($tempsomma5 > 37) {
+                            $risultati5[1] = $risultati5[1] + 1;
+
+                        } else if ($tempsomma5 > 30) {
+                            $risultati5[0] = $risultati5[0] + 1;
+                        }
+                        $tempuser5 = $r5->utente;
+                        var_dump('5: '.$tempsomma5);
+
+                        $tempsomma5 = 0;
+                    } else {
+                        $tempsomma5 = $tempsomma5 + (int)$r5->risposta;
+                    }
+                }
+            }
+
+        }
+        $risultati5['totale'] = $risultati5[0]+$risultati5[1]+$risultati5[2];
+
+        $pesistica3 = array();
+        $pesistica3[0]=$risultati5[0];
+        $pesistica3[1]=$risultati5[1];
+        $pesistica3[2]=$risultati5[2];
+
+        $divisore3 = $divisore3 + $risultati5['totale'];
+
+
+
+
         return view('risultati')->with([
             'risultati1' => $risultati1,
             'risultati2' => $risultati2,
+            'bodybuilding1' => $bodybuilding1,
+            'corsi1' => $corsi1,
+            'pesistica1' => $pesistica1,
+            'divisore1' => $divisore1,
+            'bodybuilding2' => $bodybuilding2,
+            'corsi2' => $corsi2,
+            'pesistica2' => $pesistica2,
+            'divisore2' => $divisore2,
+            'bodybuilding3' => $bodybuilding3,
+            'corsi3' => $corsi3,
+            'pesistica3' => $pesistica3,
+            'divisore3' => $divisore3,
             'filters' => $filter
         ]);
     }
@@ -505,7 +1199,7 @@ class HomeController extends Controller
         }
         $risultati2['totale'] = $risultati2[0]+$risultati2[1]+$risultati2[2];
 
-        return view('risultati')->with([
+        return view('risultati-filtrati')->with([
             'risultati1' => $risultati1,
             'risultati2' => $risultati2,
             'filters' => $filter
