@@ -675,7 +675,6 @@ class HomeController extends Controller
                         $risultati4[0] = $risultati4[0] + 1;
                     }
                     $tempuser4 = $r4->utente;
-                    var_dump('4: '.$tempsomma4);
                     $tempsomma4 = 0;
 
                 } else {
@@ -690,7 +689,6 @@ class HomeController extends Controller
                             $risultati4[0] = $risultati4[0] + 1;
                         }
                         $tempuser4 = $r4->utente;
-                        var_dump('4: '.$tempsomma4);
                         $tempsomma4 = 0;
                     } else {
                         $tempsomma4 = $tempsomma4 + (int)$r4->risposta;
@@ -810,7 +808,7 @@ class HomeController extends Controller
 
         $utentifiltrati1 =array();
         $filtrautenti1 = Risposta::where('id_opzione', 7)
-            ->where('risposta', 'M')
+            ->where('risposta', 'F')
             ->get();
 
         foreach ($filtrautenti1 as $users1) {
@@ -886,7 +884,7 @@ class HomeController extends Controller
 
         $utentifiltrati1 =array();
         $filtrautenti1 = Risposta::where('id_opzione', 7)
-            ->where('risposta', 'M')
+            ->where('risposta', 'F')
             ->get();
 
         foreach ($filtrautenti1 as $users1) {
@@ -911,7 +909,6 @@ class HomeController extends Controller
                         $risultati5[0] = $risultati5[0] + 1;
                     }
                     $tempuser5 = $r5->utente;
-                    var_dump('5: '.$tempsomma5);
 
                     $tempsomma5 = 0;
 
@@ -928,7 +925,6 @@ class HomeController extends Controller
                             $risultati5[0] = $risultati5[0] + 1;
                         }
                         $tempuser5 = $r5->utente;
-                        var_dump('5: '.$tempsomma5);
 
                         $tempsomma5 = 0;
                     } else {
